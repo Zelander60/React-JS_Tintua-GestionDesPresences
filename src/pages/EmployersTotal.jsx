@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GridComponent, Inject, ExcelExport, ContextMenu, ColumnsDirective, ColumnDirective, Search, Page, } from '@syncfusion/ej2-react-grids';
+import { GridComponent, Inject, ExcelExport, ContextMenu, ColumnsDirective, ColumnDirective, Search, Page, Filter,Toolbar } from '@syncfusion/ej2-react-grids';
 
 import { employeesData, employeesGrid, ExportMenu } from '../data/dummy';
 import Poper, { TintuaEmployeesData, TintuaEmployeesGrid } from '../data/tintua';
@@ -102,6 +102,8 @@ const EmployersTotal = () => {
         width="auto"
         allowPaging
         allowSorting
+        allowTextWrap
+        // allowFiltering
         pageSettings={{ pageCount: 5 }}
         editSettings={editing}
         toolbar={toolbarOptions}
@@ -112,7 +114,7 @@ const EmployersTotal = () => {
           {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           {TintuaEmployeesGrid.map((item, index) => <ColumnDirective key={index} {...item} />)}
         </ColumnsDirective>
-        <Inject services={[Search, Page, ExcelExport, ContextMenu]} />
+        <Inject services={[Toolbar,Search, Page, ExcelExport, ContextMenu, Filter]} />
 
       </GridComponent>
       <Fragment/>

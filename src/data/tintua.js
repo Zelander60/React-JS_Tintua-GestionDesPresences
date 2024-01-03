@@ -220,6 +220,12 @@ export const TintuaArriverGrid = [
   },
 
   {
+    field: "nom",
+    width: "0",
+    textAlign: "Center",
+  },
+
+  {
     field: "fonction",
     headerText: "Fonction",
     width: "auto",
@@ -245,6 +251,53 @@ export const TintuaArriverGrid = [
   {
     field: "Observations",
     headerText: "Observations",
+    width: "auto",
+    textAlign: "Center",
+  },
+];
+
+export const TintuaSortiesGrid = [
+  {
+    field: "ordre",
+    headerText: "Ordre",
+    width: "100",
+    textAlign: "Center",
+  },
+
+  {
+    field: "nom",
+    headerText: "Nom et Prénoms de l'agent",
+    template: gridEmployeeProfile,
+    width: "200",
+    textAlign: "Justify",
+  },
+
+  {
+    field: "fonction",
+    headerText: "Fonction",
+    width: "auto",
+    textAlign: "Center",
+  },
+
+  {
+    field: "HeureA",
+    headerText: "Heure de sortie",
+    template: EmployeeGridStatus,
+    width: "auto",
+    format: "yMd",
+    textAlign: "Center",
+  },
+
+  {
+    field: "HeureD",
+    headerText: "Heure de retour",
+    width: "auto",
+    textAlign: "Center",
+  },
+
+  {
+    field: "Observations",
+    headerText: "Motifs",
     width: "auto",
     textAlign: "Center",
   },

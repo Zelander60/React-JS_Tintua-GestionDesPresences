@@ -11,6 +11,7 @@ import './App.css';
 import { useStateContext } from './contexts/ContextProvider';
 import EmployersTotal from './pages/EmployersTotal';
 import Accueil from './pages/Accueil';
+import Sorties from './pages/Sorties';
 
 const App = () => {
   const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
@@ -75,6 +76,8 @@ const App = () => {
                 {/* <Route path="/orders" element={<Orders />} /> */}
                 <Route path="/presences" element={<Employees />} />
                 <Route path="/listeEmployes" element={<EmployersTotal />} />
+                <Route path="/sorties" element={<Sorties />} />
+
                 {/* <Route path="/customers" element={<Customers />} /> */}
 
                 {/* apps  */}

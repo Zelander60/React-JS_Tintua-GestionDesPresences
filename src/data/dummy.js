@@ -550,6 +550,11 @@ export const links = [
         icon: <IoMdContacts />,
       },
       {
+        desc: 'LISTE SORTIES',
+        name: 'sorties',
+        icon: <IoMdContacts />,
+      },
+      {
         desc: 'CALENDRIER',
         name: 'calendrier',
         icon: <AiOutlineCalendar />,
