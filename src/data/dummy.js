@@ -514,43 +514,43 @@ export const links = [
     title: 'Accueil',
     links: [
       {
-        desc: 'ecommerce',
-        name: 'ecommerce',
+        desc: "TABLEAU DE BORD",
+        name: 'acceuil',
         icon: <FiShoppingBag />,
       },
     ],
   },
 
   {
-    title: 'Menu',
+    title: 'Administration',
     links: [
+      // {
+      //   desc: 'orders',
+      //   name: 'orders',
+      //   icon: <AiOutlineShoppingCart />,
+      // },
       {
-        desc: 'orders',
-        name: 'orders',
-        icon: <AiOutlineShoppingCart />,
-      },
-      {
-        desc: 'employees',
-        name: 'employees',
-        icon: <IoMdContacts />,
-      },
-      {
-        desc: 'liste Employés',
+        desc: 'LISTE EMPLOYÉS',
         name: 'listeEmployes',
         icon: <IoMdContacts />,
       },
-      {
-        desc: 'customers',
-        name: 'customers',
-        icon: <RiContactsLine />,
-      },
+      // {
+      //   desc: 'customers',
+      //   name: 'customers',
+      //   icon: <RiContactsLine />,
+      // },
     ],
   },
   {
     title: 'Archives',
     links: [
       {
-        desc: 'calendrier',
+        desc: 'LISTE PRÉSENCES',
+        name: 'presences',
+        icon: <IoMdContacts />,
+      },
+      {
+        desc: 'CALENDRIER',
         name: 'calendrier',
         icon: <AiOutlineCalendar />,
       },
@@ -2883,11 +2883,11 @@ export const ordersData = [
 export const scheduleData = [
   {
     Id: 1,
-    Subject: 'Explosion of Betelgeuse Star',
-    Location: 'Space Center USA',
-    StartTime: '2021-01-10T04:00:00.000Z',
-    EndTime: '2021-01-10T06:30:00.000Z',
-    Color: 'red',
+    Subject: 'RAS',
+    Location: "Fada N'Gourma",
+    StartTime: '01-01-2024 8:30',
+    EndTime: '01-01-2024 ...',
+    'CategoryColor': '#357cd2',
   },
   {
     Id: 2,

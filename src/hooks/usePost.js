@@ -3,9 +3,12 @@ import API from "../constants/Api";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useFetch from "./useFetch";
 
 
-const useFetch = (endpoint, method, query) => {
+const usePost = (refresh,type) => {
+
+    // const {refresh} = props;
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +19,7 @@ const useFetch = (endpoint, method, query) => {
     //     text.
     // }
 
-    const fetchData = async () => 
+    const fetchData = async (endpoint, method, query) => 
       {  
         const id = toast.loading('En cours ...',{isLoading: true})
         setIsLoading(true);
@@ -40,16 +43,20 @@ const useFetch = (endpoint, method, query) => {
             .then((responseJson) => {
               //Showing response message coming from server
               if (responseJson?.status !== 200) {
-                toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
                 setIsLoading(false);
-                console.warn(`${responseJson}`);
+                let tt = responseJson.errors.ordre ? "Le numéro d'ordre est déja utilisé par un autre utilisateur" : 'Une erreur est survenue , réessayer .'
+                console.warn(`${tt} ${responseJson}`);
+                toast.warn(`${tt}`);
                 // console.log("iiiiiiiiii")
                 
               } else{
-                // setIsLoading(false);
+                setIsLoading(false);
                 setData(responseJson);
                 endpoint !== 'employers' ? toast.success(`${responseJson?.message}`) : '';
+                let tOrdre = query?.ordre ? query?.ordre : '1'; 
+                type == 'add' ? localStorage.setItem('Tordre', tOrdre) : '';
                 // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
+                refresh();
                 setOK(true);
                 console.log(responseJson)
               }
@@ -75,14 +82,9 @@ const useFetch = (endpoint, method, query) => {
     //   }
     // )
 
-    useEffect(() => {
-      fetchData();
-    }, [])
-
-    const refetch = () => {
-        setIsLoading(true);
-        fetchData();
-        return true
+    const refetchPost = (endpoint, method, query) => {
+        fetchData(endpoint, method, query);
+        // return true
     }
 
     const Fragment = ()=> (
@@ -99,8 +101,8 @@ const useFetch = (endpoint, method, query) => {
       theme="colored" />
     )
 
-    return { data, isLoading, error, ok, refetch , Fragment};
+    return { isLoading, error, refetchPost , Fragment};
     
 }
 
-export default useFetch;
+export default usePost;

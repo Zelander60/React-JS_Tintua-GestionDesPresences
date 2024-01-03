@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { GrLocation, GrUser } from "react-icons/gr";
 import avatar3 from "./avatar3.png";
 import avatar4 from "./avatar4.jpg";
 import { useStateContext } from '../contexts/ContextProvider';
+import { oui, referer } from "../pages/EmployersTotal";
+import Popup from "../components/Popup";
+import EmployeeForm from "../pages/Employees/EmployeeForm";
+import * as employeeService from "../services/employeeService";
+import { TbUserEdit } from "react-icons/tb";
+import { AiOutlineUserDelete } from "react-icons/ai";
+import { FaEye } from "react-icons/fa6";
+import { NavLink } from "react-router-dom";
+
 
 const CurrColor = () => {
     const { currentColor } = useStateContext();
@@ -17,9 +26,15 @@ const colorH = [
   'bg-indigo-200',
 ];
 
+function randomNumberInRange(min, max) {
+  // 👇️ get number between min (inclusive) and max (inclusive)
+  let rNum = Math.floor(Math.random() * (max - min + 1)) + min;
+  return colorH[rNum];
+}
+
 const gridEmployeeProfile = (props) => (
   <div className="flex flex-row gap-2">
-    <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center">
+    <div className={`w-6 h-6 rounded-full ${randomNumberInRange(0,colorH.length - 1)} flex items-center justify-center`}>
       <p className="py-1 px-2">{props?.nom[0] ? props?.nom[0] : 'C'}</p>
     </div>
 
@@ -56,62 +71,139 @@ const EmployeeGridStatus = (props) => (
     </div>
   );
 
-  const buttonDelete = (props) => (
-    <div className="flex flex-col gap-3">
+
+  const buttonDelete = (props) => {
+    const { setPoperPop, setType } = useStateContext();
+    const initial = {
+      ordre: `${props.ordre}`,
+      nom: `${props.nom}`,
+      fonction: `${props.fonction}`,
+      lieu: `${props.lieu}`,
+    }
+   return (
+   <div className="flex items-center justify-center py-2 gap-3">
     <button
-      onClick={()=>console.log(props.ordre)}
+      onClick={()=>{
+        setPoperPop( true, initial, props.id );
+        // console.warn(props.id)
+        setType('edit');
+      }}
       type="button"
       style={{ background: CurrColor() }}
-      className="text-white w-1/2 py-1 capitalize rounded-2xl text-md"
+      className="text-white p-1.5 rounded-lg ease-in-out delay-15 hover:scale-110"
     >
-      {'Editer'}
+      <TbUserEdit size={20} />
+
     </button>
 
     <button
-      onClick={()=>console.log(props.ordre)}
+      onClick={()=>{
+        setPoperPop( true, initial, props.id );
+        setType('delete');
+      }}
       type="button"
       style={{ background: '#FB9678' }}
-      className="text-white w-2/3 py-1 capitalize rounded-2xl text-md"
+      className="text-white p-1.5 rounded-lg transition ease-in-out delay-15 hover:scale-110"
     >
-        {'Supprimer'}
+      <AiOutlineUserDelete size={20} />
+
     </button>
-    </div>
-  )
+
+    <NavLink
+      to={"/calendrier"}
+      onClick={()=>{
+        setPoperPop( false, initial, props.id );
+        // console.warn(props.id)
+        // setType('edit');
+      }}
+      type="button"
+      style={{ background: CurrColor() }}
+      className="text-white p-1.5 rounded-lg ease-in-out delay-15 hover:scale-110"
+    >
+      <FaEye size={20} />
+
+    </NavLink>
+    
+    </div>)
+  }
+
+// export const PopUp = () => {
+//   return 
+// }
 
 export const TintuaEmployeesData = [
   {
-    Ordre: 1,
-    Name: "Nancy Davolio SUPERVIS SUPER",
-    Fonction: "SUPERVISEUR",
+    ordre: 1,
+    nom: "Nancy Davolio SUPERVIS SUPER",
+    fonction: "SUPERVISEUR",
     HeureA: "7:35",
     HeureD: "16:30",
-    Lieu: "Diapaga",
     Observations: "RAS",
-    EmployeeImage: avatar3,
   },
   {
-    Ordre: 2,
-    Name: "Nasimiyu Danai",
-    Fonction: "RRH",
+    ordre: 2,
+    nom: "Nasimiyu Danai",
+    fonction: "RRH",
     HeureA: "7:20",
     HeureD: "17:30",
-    Lieu: "Fada",
     Observations: "RAS",
-    EmployeeImage: avatar3,
   },
   {
-    Ordre: 3,
-    Name: "Iulia Albu",
-    Fonction: "LOGISTIQUE",
+    ordre: 3,
+    nom: "Iulia Albu",
+    fonction: "LOGISTIQUE",
     HeureA: "6:20",
     HeureD: "19:00",
-    Lieu: "Ouaga",
     Observations: "Banque",
-    EmployeeImage: avatar4,
   },
 ];
 
 export const TintuaEmployeesGrid = [
+  {
+    field: "id",
+    headerText: "id",
+    width: "0",
+    textAlign: "Center",
+  },
+  {
+    field: "ordre",
+    headerText: "Ordre",
+    width: "100",
+    textAlign: "Center",
+  },
+
+  {
+    field: "nom",
+    headerText: "Nom et Prénoms de l'agent",
+    template: gridEmployeeProfile,
+    width: "250",
+    textAlign: "Justify",
+  },
+
+  {
+    field: "fonction",
+    headerText: "Fonction",
+    width: "auto",
+    textAlign: "Center",
+  },
+  {
+    field: "lieu",
+    headerText: "Lieu",
+    width: "auto",
+    textAlign: "Center",
+    template: gridEmployeeCountry,
+  },
+
+  {
+    field: "Observations",
+    headerText: "Actions",
+    template: buttonDelete,
+    width: "200",
+    textAlign: "Center",
+  },
+];
+
+export const TintuaArriverGrid = [
   {
     field: "ordre",
     headerText: "Ordre",
@@ -151,18 +243,46 @@ export const TintuaEmployeesGrid = [
   },
 
   {
-    field: "lieu",
-    headerText: "Lieu",
-    width: "auto",
-    textAlign: "Center",
-    template: gridEmployeeCountry,
-  },
-
-  {
     field: "Observations",
     headerText: "Observations",
-    template: buttonDelete,
     width: "auto",
     textAlign: "Center",
   },
 ];
+
+
+const Poper = ({reffresher}) => {
+
+  const [recordForEdit, setRecordForEdit] = useState(null);
+  const { poper, setPoper, propsID, initialVal, type } = useStateContext();
+
+  const addOrEdit = (employee, resetForm) => {
+    if (employee.id == 0)
+        employeeService.insertEmployee(employee)
+    else
+        employeeService.updateEmployee(employee)
+    resetForm()
+    setRecordForEdit(null)
+}
+
+  return (
+    <Popup
+    title={type == 'edit' ? `Modifier "${initialVal?.nom ?? ''}" ?` : `Supprimer "${initialVal?.nom ?? ''}" ?`}
+    openPopup={poper}
+    setOpenPopup={setPoper}
+    >
+      <EmployeeForm
+        recordForEdit={recordForEdit}
+        addOrEdit={addOrEdit} 
+        refresh={reffresher}
+        type={type}
+        dataEdit={initialVal}
+        id={propsID}
+        close={setPoper}
+      />
+    </Popup>
+  )
+
+}
+
+export default Poper;

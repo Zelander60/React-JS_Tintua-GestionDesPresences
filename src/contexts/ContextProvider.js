@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
 const StateContext = createContext();
 
@@ -11,27 +11,68 @@ const initialState = {
 
 export const ContextProvider = ({ children }) => {
   const [screenSize, setScreenSize] = useState(undefined);
-  const [currentColor, setCurrentColor] = useState('#03C9D7');
-  const [currentMode, setCurrentMode] = useState('Light');
+  const [currentColor, setCurrentColor] = useState("#03C9D7");
+  const [currentMode, setCurrentMode] = useState("Light");
   const [themeSettings, setThemeSettings] = useState(false);
   const [activeMenu, setActiveMenu] = useState(true);
   const [isClicked, setIsClicked] = useState(initialState);
+  const [poper, setPoper] = useState(false);
+  const [initialVal, setInitialVal] = useState(null);
+  const [propsID, setPropsID] = useState('0');
+  const [type, setType] = useState('add');
 
   const setMode = (e) => {
     setCurrentMode(e.target.value);
-    localStorage.setItem('themeMode', e.target.value);
+    localStorage.setItem("themeMode", e.target.value);
   };
 
   const setColor = (color) => {
     setCurrentColor(color);
-    localStorage.setItem('colorMode', color);
+    localStorage.setItem("colorMode", color);
   };
 
-  const handleClick = (clicked) => setIsClicked({ ...initialState, [clicked]: true });
+  const setPoperPop = (act, initialValue, id) => {
+    setPoper(act);
+    setInitialVal(initialValue);
+    // console.error(id)
+    setPropsID(id);
+  };
+
+  const handleClick = (clicked) =>
+    setIsClicked({
+      ...initialState,
+      [clicked]: true,
+    });
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <StateContext.Provider value={{ currentColor, currentMode, activeMenu, screenSize, setScreenSize, handleClick, isClicked, initialState, setIsClicked, setActiveMenu, setCurrentColor, setCurrentMode, setMode, setColor, themeSettings, setThemeSettings }}>
+    <StateContext.Provider
+      value={{
+        setPoper,
+        type,
+        setType,
+        propsID,
+        initialVal,
+        poper,
+        setPoperPop,
+        currentColor,
+        currentMode,
+        activeMenu,
+        screenSize,
+        setScreenSize,
+        handleClick,
+        isClicked,
+        initialState,
+        setIsClicked,
+        setActiveMenu,
+        setCurrentColor,
+        setCurrentMode,
+        setMode,
+        setColor,
+        themeSettings,
+        setThemeSettings,
+      }}
+    >
       {children}
     </StateContext.Provider>
   );
