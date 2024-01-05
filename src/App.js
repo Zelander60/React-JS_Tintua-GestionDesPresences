@@ -12,9 +12,12 @@ import { useStateContext } from './contexts/ContextProvider';
 import EmployersTotal from './pages/EmployersTotal';
 import Accueil from './pages/Accueil';
 import Sorties from './pages/Sorties';
+import Connexion from './pages/Connexion';
+import Offline from './pages/Offline';
 
 const App = () => {
-  const { setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
+
+  const { online, setCurrentColor, setCurrentMode, currentMode, activeMenu, currentColor, themeSettings, setThemeSettings } = useStateContext();
 
   useEffect(() => {
     const currentThemeColor = localStorage.getItem('colorMode');
@@ -69,14 +72,14 @@ const App = () => {
 
               <Routes>
                 {/* dashboard  */}
-                <Route path="/" element={(<Accueil />)} />
-                <Route path="/acceuil" element={(<Accueil />)} />
+                <Route path="/" element={(<Connexion />)} />
+                <Route path="/acceuil" element={(online ? <Accueil /> : <Offline />)} />
 
                 {/* pages  */}
                 {/* <Route path="/orders" element={<Orders />} /> */}
-                <Route path="/presences" element={<Employees />} />
-                <Route path="/listeEmployes" element={<EmployersTotal />} />
-                <Route path="/sorties" element={<Sorties />} />
+                <Route path="/presences" element={online ? <Employees /> : <Offline />} />
+                <Route path="/listeEmployes" element={online ? <EmployersTotal /> : <Offline />} />
+                <Route path="/sorties" element={online ? <Sorties /> : <Offline />} />
 
                 {/* <Route path="/customers" element={<Customers />} /> */}
 
@@ -84,7 +87,7 @@ const App = () => {
                 {/* <Route path="/kanban" element={<Kanban />} /> */}
                 {/* <Route path="/test" element={<EmployeesT />} /> */}
                 {/* <Route path="/editor" element={<Editor />} /> */}
-                <Route path="/calendrier" element={<Calendar />} />
+                <Route path="/calendrier" element={online ? <Calendar /> : <Offline />} />
                 {/* <Route path="/color-picker" element={<ColorPicker />} /> */}
 
                 {/* charts  */}

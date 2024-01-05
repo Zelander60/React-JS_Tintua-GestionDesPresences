@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const StateContext = createContext();
 
@@ -20,6 +20,16 @@ export const ContextProvider = ({ children }) => {
   const [initialVal, setInitialVal] = useState(null);
   const [propsID, setPropsID] = useState('0');
   const [type, setType] = useState('add');
+  const [online, setOnline] = useState(false);
+
+  // useEffect(() => {
+  //   if (online) {
+  //     const timeOut = setTimeout(()=>{
+  //       setOnline(false);
+  //     }, 10000)
+  //   }
+  // }, [online])
+  
 
   const setMode = (e) => {
     setCurrentMode(e.target.value);
@@ -48,6 +58,8 @@ export const ContextProvider = ({ children }) => {
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <StateContext.Provider
       value={{
+        online,
+        setOnline,
         setPoper,
         type,
         setType,

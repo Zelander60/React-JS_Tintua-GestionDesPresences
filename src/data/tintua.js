@@ -183,13 +183,13 @@ export const TintuaEmployeesGrid = [
   {
     field: "fonction",
     headerText: "Fonction",
-    width: "auto",
+    width: "100",
     textAlign: "Center",
   },
   {
     field: "lieu",
     headerText: "Lieu",
-    width: "auto",
+    width: "100",
     textAlign: "Center",
     template: gridEmployeeCountry,
   },
@@ -228,30 +228,30 @@ export const TintuaArriverGrid = [
   {
     field: "fonction",
     headerText: "Fonction",
-    width: "auto",
+    width: "100",
     textAlign: "Center",
   },
 
   {
     field: "HeureA",
-    headerText: "Heure d'arrivée",
+    headerText: "H. Arrivée",
     template: EmployeeGridStatus,
-    width: "auto",
+    width: "100",
     format: "yMd",
     textAlign: "Center",
   },
 
   {
     field: "HeureD",
-    headerText: "Heure de départ",
-    width: "auto",
+    headerText: "H. Départ",
+    width: "100",
     textAlign: "Center",
   },
 
   {
     field: "Observations",
     headerText: "Observations",
-    width: "auto",
+    width: "100",
     textAlign: "Center",
   },
 ];
@@ -275,30 +275,30 @@ export const TintuaSortiesGrid = [
   {
     field: "fonction",
     headerText: "Fonction",
-    width: "auto",
+    width: "100",
     textAlign: "Center",
   },
 
   {
     field: "HeureA",
-    headerText: "Heure de sortie",
+    headerText: "H. Sortie",
     template: EmployeeGridStatus,
-    width: "auto",
+    width: "100",
     format: "yMd",
     textAlign: "Center",
   },
 
   {
     field: "HeureD",
-    headerText: "Heure de retour",
-    width: "auto",
+    headerText: "H. Retour",
+    width: "100",
     textAlign: "Center",
   },
 
   {
     field: "Observations",
     headerText: "Motifs",
-    width: "auto",
+    width: "100",
     textAlign: "Center",
   },
 ];

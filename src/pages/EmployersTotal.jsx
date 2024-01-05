@@ -102,8 +102,8 @@ const EmployersTotal = () => {
         width="auto"
         allowPaging
         allowSorting
-        allowTextWrap
-        // allowFiltering
+        allowResizing
+        textWrapSettings={{wrapMode:"Content"}}
         pageSettings={{ pageCount: 5 }}
         editSettings={editing}
         toolbar={toolbarOptions}
@@ -120,6 +120,7 @@ const EmployersTotal = () => {
       <Fragment/>
       <ToastContainer
       position="top-right"
+      className={"conZ"}
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop={false}

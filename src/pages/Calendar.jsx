@@ -4,17 +4,16 @@ import { DatePickerComponent } from '@syncfusion/ej2-react-calendars';
 
 import { scheduleData } from '../data/dummy';
 import { Header } from '../components';
-import { loadCldr} from '@syncfusion/ej2-base';
+import { Ajax, loadCldr, L10n} from '@syncfusion/ej2-base';
 import { FaCalendarAlt, FaUserTie, FaBriefcase, FaArrowLeft } from "react-icons/fa";
 import { useStateContext } from '../contexts/ContextProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import API from '../constants/Api';
 import { NavLink } from 'react-router-dom';
-
+import { localJSON } from './locale';
 
 // eslint-disable-next-line react/destructuring-assignment
-const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
 
 const Scheduler = () => {
 
@@ -23,7 +22,16 @@ const Scheduler = () => {
     require('cldr-data/main/fr-CH/ca-gregorian.json'),
     require('cldr-data/main/fr-CH/numbers.json'),
     require('cldr-data/main/fr-CH/timeZoneNames.json')
-     );
+  );
+
+// let localeTexts;
+// let ajax = new Ajax(localJSON, 'GET', false);
+// ajax.onSuccess = (value) => {
+//     localeTexts = value;
+//     console.log(value);
+// };
+// ajax.send();
+L10n.load(localJSON);
 
   const scheduleObj = useRef(null);
 
@@ -56,6 +64,9 @@ const Scheduler = () => {
         args.items.push(exportItem);
     }
 }
+
+const { poper, currentColor, propsID, initialVal, type } = useStateContext();
+
 const onExportClick = () => {
   let customFields = [
     // { name: 'Id', text: 'N° d’ordre' },
@@ -65,11 +76,9 @@ const onExportClick = () => {
     { name: 'Location', text: 'Lieu' },
     // { name: 'OwnerId', text: 'Owners' }
 ];
-let exportValues = { fieldsInfo: customFields, fileName: "Feuille de Ouoba" };
+let exportValues = { fieldsInfo: customFields, fileName: initialVal?.nom ?? 'Inconnu' };
   scheduleObj.current.exportToExcel(exportValues);
 }
-
-const { poper, currentColor, propsID, initialVal, type } = useStateContext();
 
 const [dateTime, setDateTime] = useState('now');
 const [data, setData] = useState([]);
@@ -107,7 +116,11 @@ useEffect(() => {
                 } else{
                   // setIsLoading(false);
                   setData(responseJson);
-                  toast.success(`${responseJson?.message}`);
+                  if(responseJson?.jours == 0){
+                    toast.warn("Aucune Présence !");
+                  }else{
+                    toast.success(`${responseJson?.message}`);
+                  }
                   // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
                   // setOK(true);
                   console.log(responseJson)
@@ -190,7 +203,7 @@ function onEventRendered(args) {
 }
 
   return (
-    <div className="m-2 md:m-10 mt-4 p-2 md:p-10 bg-white rounded-3xl">
+    <div className="m-2 md:m-10 mt-20 p-2 md:p-10 bg-white rounded-3xl">
       {/* <Header category="App" title="Calendrier" /> */}
 
       {/* <div className="flex flex-wrap lg:flex-nowrap justify-center "> */}
@@ -253,6 +266,7 @@ function onEventRendered(args) {
       <ToastContainer
       position="top-right"
       autoClose={5000}
+      className={"conZ"}
       hideProgressBar={false}
       newestOnTop={false}
       closeOnClick

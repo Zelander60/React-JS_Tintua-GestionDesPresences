@@ -126,6 +126,9 @@ const Sorties = () => {
         width="auto"
         allowPaging
         allowSorting
+        allowResizing
+        textWrapSettings={{wrapMode:"Content"}}
+        allowTextWrap
         pageSettings={{ pageCount: 5 }}
         editSettings={editing}
         toolbar={toolbarOptions}
@@ -141,6 +144,7 @@ const Sorties = () => {
       </GridComponent>
       <ToastContainer
       position="top-right"
+      className={"conZ"}
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop={false}

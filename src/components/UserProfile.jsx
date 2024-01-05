@@ -6,12 +6,19 @@ import { Button } from './Button';
 import { userProfileData } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import avatar from '../data/tintua_trans.png';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile = () => {
-  const { currentColor } = useStateContext();
+  const { setOnline, currentColor } = useStateContext();
+  const goTo = useNavigate();
+
+  const perform = () => {
+    setOnline(false);
+    goTo("/");
+  }
 
   return (
-    <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-96">
+    <div className="nav-item absolute right-1 top-16 bg-white dark:bg-[#42464D] p-8 rounded-lg w-80">
       <div className="flex justify-between items-center">
         <p className="font-semibold text-lg dark:text-gray-200">Profile Admin</p>
         <Button
@@ -34,7 +41,7 @@ const UserProfile = () => {
           <p className="text-gray-500 text-sm font-semibold dark:text-gray-400"> rrh@tintua.org </p>
         </div>
       </div>
-      <div>
+      {/* <div>
         {userProfileData.map((item, index) => (
           <div key={index} className="flex gap-5 border-b-1 border-color p-4 hover:bg-light-gray cursor-pointer  dark:hover:bg-[#42464D]">
             <button
@@ -51,15 +58,27 @@ const UserProfile = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
       <div className="mt-5">
         <Button
+          perfom={perform}
           color="white"
           bgColor={currentColor}
           text="Se Déconnecter"
           borderRadius="10px"
           width="full"
         />
+    {/* <button
+      type="button"
+      onClick={() => {
+        setOnline(false); 
+        goTo("/acceuil")
+      }}
+      style={{ backgroundColor: currentColor, color: "white", borderRadius: "10px" }}
+      className={`p-3 w-full hover:drop-shadow-xl`}
+    >
+      Se Déconnecter
+    </button> */}
       </div>
     </div>
 

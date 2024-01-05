@@ -121,7 +121,7 @@ const Accueil = () => {
     {
       icon: <FaUserTie />,
       amount: data?.data?.employers ?? '...',
-      percentage: '+23%',
+      percentage: '+ 0%',
       title: 'Employés',
       iconColor: 'rgb(255, 244, 229)',
       iconBg: '#1A97F5',
@@ -149,7 +149,7 @@ const Accueil = () => {
   ];
 
   return (
-    <div className="mt-3">
+    <div className="mt-20 sm:mt-3">
       <div className="flex flex-wrap lg:flex-nowrap justify-center ">
         
         <div className="flex m-3 flex-wrap justify-center gap-1 items-center">
@@ -163,7 +163,7 @@ const Accueil = () => {
                 {item.icon}
               </button>
               <p className="mt-3">
-                <span className="text-lg font-semibold">{item.amount}</span>
+                <span className=" text-base font-semibold">{item.amount}</span>
                 <span className={`text-sm text-${item.pcColor} ml-2`}>
                   {item.percentage}
                 </span>
@@ -188,6 +188,8 @@ const Accueil = () => {
         width="auto"
         allowPaging
         allowSorting
+        allowResizing
+        textWrapSettings={{wrapMode:"Content"}}
         pageSettings={{ pageCount: 5 }}
         editSettings={editing}
         toolbar={toolbarOptions}

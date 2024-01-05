@@ -126,6 +126,8 @@ const Employees = () => {
         width="auto"
         allowPaging
         allowSorting
+        allowResizing
+        textWrapSettings={{wrapMode:"Content"}}
         pageSettings={{ pageCount: 5 }}
         editSettings={editing}
         toolbar={toolbarOptions}
@@ -141,6 +143,7 @@ const Employees = () => {
       </GridComponent>
       <ToastContainer
       position="top-right"
+      className={"conZ"}
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop={false}

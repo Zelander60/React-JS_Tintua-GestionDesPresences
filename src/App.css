@@ -12,6 +12,9 @@
     z-index: 10000000;
   }
 }
+.conZ{
+  z-index: 10000000 !important;
+}
 
 .e-dlg-center-center, .e-quick-popup-wrapper.e-device{
   z-index: 1000000 !important;
