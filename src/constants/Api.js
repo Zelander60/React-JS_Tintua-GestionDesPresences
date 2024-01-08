@@ -1,5 +1,5 @@
 let API = {
-    Local_Host_Name : "http://localhost:85",
+    Local_Host_Name : "https://tintua.000webhostapp.com",
 };
 
 export default API;
