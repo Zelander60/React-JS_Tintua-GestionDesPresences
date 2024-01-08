@@ -72,7 +72,7 @@ export default function EmployeeForm(props) {
             // addOrEdit(values, resetForm);
             // console.log(id)
             type == 'add' ? refetchPost('employers/store','POST',values) :
-            type == 'edit' ? refetchPost(`employers/update/${id}`,'PUT',values) :
+            type == 'edit' ? refetchPost(`employers/update/${id}`,'POST',values) :
                             refetchPost(`employers/delete/${id}`,'DELETE')
         }
     }

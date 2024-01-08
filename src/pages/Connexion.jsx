@@ -22,7 +22,7 @@ const Connexion = () => {
             // setIsLoading(true);
             // console.info(query)
         await fetch(`${API.Local_Host_Name}/api/user`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/json',

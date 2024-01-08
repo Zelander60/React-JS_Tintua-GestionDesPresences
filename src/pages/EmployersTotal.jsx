@@ -45,7 +45,7 @@ const EmployersTotal = () => {
 
   const editing = { allowDeleting: true, allowEditing: true };
 
-  const { data, isLoading, error, ok , refetch, Fragment} = useFetch(
+  const { data, isLoading, refetch, Fragment} = useFetch(
     'employers',
     'GET'
   );
@@ -136,18 +136,18 @@ const EmployersTotal = () => {
       />
 
             <Popup
-                title="Formulaire"
-                openPopup={modalIsOpen}
-                setOpenPopup={setModalIsOpen}
+              title="Formulaire"
+              openPopup={modalIsOpen}
+              setOpenPopup={setModalIsOpen}
             >
                 <EmployeeForm
-                    recordForEdit={recordForEdit}
-                    addOrEdit={addOrEdit} 
-                    refresh={refetch}
-                    type={type}
-                    dataEdit={null}
-                    id={0}
-                    close={setPoper}
+                  recordForEdit={recordForEdit}
+                  addOrEdit={addOrEdit} 
+                  refresh={refetch}
+                  type={type}
+                  dataEdit={null}
+                  id={0}
+                  close={setPoper}
                 />
             </Popup>
 
