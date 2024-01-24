@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 
 
-
 const Connexion = () => {
 
   const [user, setUser] = useState('');
@@ -22,17 +21,27 @@ const Connexion = () => {
             // setIsLoading(true);
             // console.info(query)
         await fetch(`${API.Local_Host_Name}/api/user`, {
-                method: 'POST',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                },
-    
-                body: JSON.stringify({
-                  'user': user,
-                  'password': password,
-                }),
-              })
+          // await fetch('http://localhost:8000/api/user', {
+          // await fetch('http://tintua.000webhostapp.com/api/user', {
+            // credentials: "omit",
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              'user': user,
+              'password': password,
+            }),
+
+            // referrer: "http://localhost:3000/",
+            method: "POST",
+            mode: "cors",
+                // mode: 'same-origin', // no-cors, cors, *same-origin
+                // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                // credentials: 'same-origin',
+                // proxy: "http://localhost:3000",
+
+            })
               .then(response => {
                 if (!response.ok) {
                   // handle network errors or non-2xx status codes
@@ -57,7 +66,7 @@ const Connexion = () => {
                     toast.success(`${responseJson?.message}`);
                     // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
                     // setOK(true);
-                    console.log(responseJson)
+                    console.log(`${responseJson} ${user}`)
                   }
                 })
                 .catch(errors => {
@@ -72,7 +81,6 @@ const Connexion = () => {
                 });
     }
 
-
     return (
       <>
         {/*
@@ -84,19 +92,19 @@ const Connexion = () => {
           ```
         */}
         <div className="conZ absolute left-0 top-0 bottom-0 min-h-full w-full bg-white">
-        <div className="flex min-h-full items-center flex-col justify-center mb-16 px-6 py-12 lg:px-8">
+        <div className="flex -mt-5 min-h-full items-center flex-col justify-center mb-16 px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
               className="mx-auto h-10 w-auto"
               src={logo}
               alt="Your Company"
             />
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            <h2 className="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               BIENVENUE
             </h2>
           </div>
   
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" method="">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -152,13 +160,6 @@ const Connexion = () => {
                 </button>
               </div>
             </form>
-  
-            {/* <p className="mt-10 text-center text-sm text-gray-500">
-              Not a member?{' '}
-              <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                Start a 14 day free trial
-              </a>
-            </p> */}
           </div>
         </div>
 

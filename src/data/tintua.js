@@ -77,6 +77,7 @@ const EmployeeGridStatus = (props) => (
     const initial = {
       ordre: `${props.ordre}`,
       nom: `${props.nom}`,
+      email: `${props.email}`,
       fonction: `${props.fonction}`,
       lieu: `${props.lieu}`,
     }

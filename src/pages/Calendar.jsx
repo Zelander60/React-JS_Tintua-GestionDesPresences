@@ -12,8 +12,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import API from '../constants/Api';
 import { NavLink } from 'react-router-dom';
 import { localJSON } from './locale';
+import Controls from '../components/controls/Controls';
+import MiniForm from './MiniForm';
 
 // eslint-disable-next-line react/destructuring-assignment
+const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
 
 const Scheduler = () => {
 
@@ -35,19 +38,20 @@ L10n.load(localJSON);
 
   const scheduleObj = useRef(null);
 
-  // const [scheduleObj2, setscheduleObj2] = useState()
+  const [DateForm, setDateForm] = useState('auto');
+
 
   const change = (args) => {
-    scheduleObj.current.selectedDate = args.value;
     /* eslint-disable no-console */
-    let date = "";
-    date = (args.value).toLocaleDateString();
-    // let normal = (args.value.).toString();
-    // console.log(date.replaceAll('/','x',))
-    console.log(args.value)
-    let dte = date.split(' ')
-    // console.log(`${dte[1]}${dte[3]}`);
-    scheduleObj.current.dataBind();
+    let fresh2 = "";
+    let fresh = (args.value).toLocaleDateString();
+    fresh2 = (args.value).toString();
+    let take = fresh2.split(" ");
+    let date = fresh.replace(/\//gi, '-');
+    let ba = `${take[1]}${take[3]}`
+    let base = ba.toLowerCase();
+    console.log(`${date}.${base}`);
+    setDateForm(`${date}.${base}`);
   };
 
   const onDragStart = (arg) => {
@@ -83,60 +87,61 @@ let exportValues = { fieldsInfo: customFields, fileName: initialVal?.nom ?? 'Inc
 const [dateTime, setDateTime] = useState('now');
 const [data, setData] = useState([]);
 
-useEffect(() => {
-  const fetchPresence = async () => {
-    const id = toast.loading('En cours ...',{isLoading: true})
-          // setIsLoading(true);
-          // console.info(query)
-      await fetch(`${API.Local_Host_Name}/api/presences/month/${propsID ?? 2}/${dateTime}`, {
-              method: 'GET',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-  
-              // body: JSON.stringify(query),
-            })
-            .then(response => {
-              if (!response.ok) {
-                // handle network errors or non-2xx status codes
-                toast.error('Vérifiez votre connexion !');
-              }
-              return response.json();
-            })
-              .then((responseJson) => {
-                //Showing response message coming from server
-                if (responseJson?.status !== 200) {
-                  toast.warn(`${responseJson?.message}`);
-                  // setIsLoading(false);
-                  console.warn(`${responseJson}`);
-                  setData(responseJson);
-                  // console.log(new Date())
-                  
-                } else{
-                  // setIsLoading(false);
-                  setData(responseJson);
-                  if(responseJson?.jours == 0){
-                    toast.warn("Aucune Présence !");
-                  }else{
-                    toast.success(`${responseJson?.message}`);
-                  }
-                  // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
-                  // setOK(true);
-                  console.log(responseJson)
-                }
-              })
-              .catch(errors => {
-                //display error message         
-                toast.error("Une erreure est survenue !");
-                console.warn(errors);
-                // setError(errors);
-              })
-              .finally(()=>{
-                toast.dismiss(id);
+const fetchPresence = async () => {
+  const id = toast.loading('En cours ...',{isLoading: true})
+        // setIsLoading(true);
+        // console.info(query)
+    await fetch(`${API.Local_Host_Name}/api/presences/month/${propsID ?? 2}/${dateTime}`, {
+            method: 'GET',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+
+            // body: JSON.stringify(query),
+          })
+          .then(response => {
+            if (!response.ok) {
+              // handle network errors or non-2xx status codes
+              toast.error('Vérifiez votre connexion !');
+            }
+            return response.json();
+          })
+            .then((responseJson) => {
+              //Showing response message coming from server
+              if (responseJson?.status !== 200) {
+                toast.warn(`${responseJson?.message}`);
                 // setIsLoading(false);
-              });
-  }
+                console.warn(`${responseJson}`);
+                setData(responseJson);
+                // console.log(new Date())
+                
+              } else{
+                // setIsLoading(false);
+                setData(responseJson);
+                if(responseJson?.jours == 0){
+                  toast.warn("Aucune Présence !");
+                }else{
+                  toast.success(`${responseJson?.message}`);
+                }
+                // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
+                // setOK(true);
+                console.log(responseJson)
+              }
+            })
+            .catch(errors => {
+              //display error message         
+              toast.error("Une erreure est survenue !");
+              console.warn(errors);
+              // setError(errors);
+            })
+            .finally(()=>{
+              toast.dismiss(id);
+              // setIsLoading(false);
+            });
+}
+
+useEffect(() => {
   fetchPresence();
 }, [dateTime])
 
@@ -262,6 +267,30 @@ function onEventRendered(args) {
         </ViewsDirective>
         <Inject services={[Month, ExcelExport, Agenda, Resize]} />
       </ScheduleComponent>
+
+      <PropertyPane>
+        <table
+          style={{ width: '100%', background: 'white' }}
+        >
+          <tbody>
+            <tr style={{ height: 'auto' }}>
+              <td style={{ width: '25%' }}>
+                <DatePickerComponent
+                  // value={new Date()}
+                  showClearButton={false}
+                  placeholder="Choisir une Date"
+                  floatLabelType="Always"
+                  change={change}
+                  locale='fr-CH'
+                />
+              </td>
+              <td style={{ width: '80%',alignItems: 'center', justifyContent: 'center' }}>
+                <MiniForm refresh={fetchPresence} ID={propsID} date={DateForm} color={currentColor}/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </PropertyPane>
             
       <ToastContainer
       position="top-right"

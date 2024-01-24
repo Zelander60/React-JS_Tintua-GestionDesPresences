@@ -23,6 +23,7 @@ const initialFValues = {
     // id: 0,
     ordre: (parseInt(localStorage.getItem('Tordre')) + 1).toString(),
     nom: '',
+    email: 'vide',
     fonction: '',
     lieu: 'Fada',
     // gender: 'male',
@@ -40,8 +41,8 @@ export default function EmployeeForm(props) {
             temp.nom = fieldValues.nom ? "" : "Ce champ est requis ."
         if ('lieu' in fieldValues)
             temp.lieu = fieldValues.lieu ? "" : "Ce champ est requis ."
-        // if ('email' in fieldValues)
-        //     temp.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : "Email is not valid."
+        if ('email' in fieldValues)
+            temp.email = (/$^|.+@.+..+/).test(fieldValues.email) ? "" : "Email non valide ."
         if ('ordre' in fieldValues)
             temp.ordre = fieldValues.ordre.length < 5 && fieldValues.ordre.length !== 0 ? "" : "Ce champ est requis et 4 chiffres max !"
         if ('fonction' in fieldValues)
@@ -73,7 +74,7 @@ export default function EmployeeForm(props) {
             // console.log(id)
             type == 'add' ? refetchPost('employers/store','POST',values) :
             type == 'edit' ? refetchPost(`employers/update/${id}`,'POST',values) :
-                            refetchPost(`employers/delete/${id}`,'DELETE')
+                            refetchPost(`employers/delete/${id}`,'GET')
         }
     }
 
@@ -143,14 +144,25 @@ export default function EmployeeForm(props) {
                         onChange={handleInputChange}
                         items={genderItems}
                     /> */}
-                    { type == 'delete' ? '' : <Controls.Select
-                        name="fonction"
-                        label="Fonction"
-                        value={values.fonction}
+                    { type == 'delete' ? '' : 
+                    <>
+                        <Controls.Select
+                            name="fonction"
+                            label="Fonction"
+                            value={values.fonction}
+                            onChange={handleInputChange}
+                            options={employeeService.getDepartmentCollection()}
+                            error={errors.fonction}
+                        />
+                        <Controls.Input
+                        label="Email"
+                        name="email"
+                        value={values.email}
                         onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
-                        error={errors.fonction}
-                    />}
+                        error={errors.email}
+                        />
+                    </>
+                    }
 
                         { type == 'edit' ? 
                          <div className='flex flex-row gap-2 w-1/2 items-center ml-2'>
