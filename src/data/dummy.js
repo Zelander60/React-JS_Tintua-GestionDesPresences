@@ -3,13 +3,17 @@ import { AiOutlineCalendar, AiOutlineShoppingCart, AiOutlineAreaChart, AiOutline
 import { FiShoppingBag, FiEdit, FiPieChart, FiBarChart, FiCreditCard, FiStar, FiShoppingCart } from 'react-icons/fi';
 import { BsKanban, BsBarChart, BsBoxSeam, BsCurrencyDollar, BsShield, BsChatLeft } from 'react-icons/bs';
 import { BiColorFill } from 'react-icons/bi';
-import { IoMdContacts } from 'react-icons/io';
+import { IoIosToday, IoMdCalendar, IoMdContacts, IoMdToday } from 'react-icons/io';
 import { RiContactsLine, RiStockLine } from 'react-icons/ri';
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { MdOutlineSupervisorAccount, MdSpaceDashboard } from 'react-icons/md';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TiTick } from 'react-icons/ti';
 import { GiLouvrePyramid } from 'react-icons/gi';
 import { GrLocation } from 'react-icons/gr';
+import { IoCalendarNumber } from "react-icons/io5";
+import { BiSolidContact } from "react-icons/bi";
+import { RiContactsBookUploadFill, RiContactsBookFill } from "react-icons/ri";
+
 import avatar from './avatar.jpg';
 import avatar2 from './avatar2.jpg';
 import avatar3 from './avatar3.png';
@@ -22,6 +26,7 @@ import product5 from './product5.jpg';
 import product6 from './product6.jpg';
 import product7 from './product7.jpg';
 import avatar10 from './tintua_trans.png';
+import { FaHospitalUser } from 'react-icons/fa6';
 // import product8 from './product8.jpg';
 
 export const gridOrderImage = (props) => (
@@ -516,7 +521,7 @@ export const links = [
       {
         desc: "TABLEAU DE BORD",
         name: 'acceuil',
-        icon: <FiShoppingBag />,
+        icon: <MdSpaceDashboard />,
       },
     ],
   },
@@ -532,7 +537,7 @@ export const links = [
       {
         desc: 'LISTE EMPLOYÉS',
         name: 'listeEmployes',
-        icon: <IoMdContacts />,
+        icon: <FaHospitalUser />,
       },
       // {
       //   desc: 'customers',
@@ -547,17 +552,17 @@ export const links = [
       {
         desc: 'LISTE PRÉSENCES',
         name: 'presences',
-        icon: <IoMdContacts />,
+        icon:  <RiContactsBookFill />,
       },
       {
         desc: 'LISTE SORTIES',
         name: 'sorties',
-        icon: <IoMdContacts />,
+        icon: <RiContactsBookUploadFill />,
       },
       {
         desc: 'CALENDRIER',
         name: 'calendrier',
-        icon: <AiOutlineCalendar />,
+        icon: <IoCalendarNumber />,
       },
       // {
       //   name: 'kanban',

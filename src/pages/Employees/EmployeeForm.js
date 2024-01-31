@@ -74,7 +74,11 @@ export default function EmployeeForm(props) {
             // console.log(id)
             type == 'add' ? refetchPost('employers/store','POST',values) :
             type == 'edit' ? refetchPost(`employers/update/${id}`,'POST',values) :
-                            refetchPost(`employers/delete/${id}`,'GET')
+                            refetchPost(`employers/delete/${id}`,'GET');
+            close(false);
+        }else{
+            type == 'delete' ? refetchPost(`employers/delete/${id}`,'GET') : '';
+            close(false);
         }
     }
 
@@ -197,7 +201,7 @@ export default function EmployeeForm(props) {
                         <Controls.Button
                             type="submit"
                             text={type == 'add' ? "Ajouter" : type == 'edit' ? "Mettre à Jour" : "OUI"}
-                            onClick={()=>close(false)}
+                            // onClick={()=>close(false)}
                         />
                         <Controls.Button
                             text={type == 'delete' ? "NON" : "Raffraichir"}

@@ -11,11 +11,7 @@ import { Header } from '../components';
 import { loadCldr} from '@syncfusion/ej2-base';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import API from '../constants/Api';
-import { HiOutlineRefresh } from 'react-icons/hi';
-import { FiBarChart } from 'react-icons/fi';
-import { BsBoxSeam } from 'react-icons/bs';
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
+// import API from '../constants/Api';
 import { FaBusinessTime, FaUserClock, FaUserTie } from "react-icons/fa";
 
 const DropDown = ({ currentMode }) => (
@@ -26,7 +22,7 @@ const DropDown = ({ currentMode }) => (
 const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
 
 const Accueil = () => {
-  const { currentColor, currentMode } = useStateContext();
+  const { currentColor, API } = useStateContext();
   loadCldr(
     require('cldr-data/supplemental/numberingSystems.json'),
     require('cldr-data/main/fr-CH/ca-gregorian.json'),

@@ -13,6 +13,7 @@ export default function Select(props) {
                 label={label}
                 name={name}
                 value={value}
+                className='flex-1 w-40'
                 onChange={onChange}>
                 <MenuItem value="">None</MenuItem>
                 {

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import API from "../constants/Api";
+// import API from "../constants/Api";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useFetch from "./useFetch";
+import { useStateContext } from "../contexts/ContextProvider";
 
 
 const usePost = (refresh,type) => {
@@ -14,6 +15,8 @@ const usePost = (refresh,type) => {
     const [isLoading, setIsLoading] = useState(false);
     const [ok, setOK] = useState(false);
     const [error, setError] = useState(null);
+
+    const { API } = useStateContext();
 
     // const if_contain = (text) => {
     //     text.
@@ -44,7 +47,7 @@ const usePost = (refresh,type) => {
               //Showing response message coming from server
               if (responseJson?.status !== 200) {
                 setIsLoading(false);
-                let tt = responseJson.errors.ordre ? "Le numéro d'ordre est déja utilisé par un autre utilisateur" : 'Une erreur est survenue , réessayer .'
+                let tt = responseJson?.errors?.ordre ? "Le numéro d'ordre est déja utilisé par un autre utilisateur" : 'Une erreur est survenue , réessayer .'
                 console.warn(`${tt} ${responseJson}`);
                 toast.warn(`${tt}`);
                 // console.log("iiiiiiiiii")

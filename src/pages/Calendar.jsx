@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ScheduleComponent, ViewsDirective, ViewDirective, Day, Month, Agenda,ExcelExport, Inject, Resize } from '@syncfusion/ej2-react-schedule';
-import { DatePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { DatePickerComponent, DateTimePicker, TimePickerComponent } from '@syncfusion/ej2-react-calendars';
 
 import { scheduleData } from '../data/dummy';
 import { Header } from '../components';
@@ -9,7 +9,7 @@ import { FaCalendarAlt, FaUserTie, FaBriefcase, FaArrowLeft } from "react-icons/
 import { useStateContext } from '../contexts/ContextProvider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import API from '../constants/Api';
+// import API from '../constants/Api';
 import { NavLink } from 'react-router-dom';
 import { localJSON } from './locale';
 import Controls from '../components/controls/Controls';
@@ -69,7 +69,7 @@ L10n.load(localJSON);
     }
 }
 
-const { poper, currentColor, propsID, initialVal, type } = useStateContext();
+const { currentColor, propsID, initialVal, API } = useStateContext();
 
 const onExportClick = () => {
   let customFields = [
@@ -87,11 +87,19 @@ let exportValues = { fieldsInfo: customFields, fileName: initialVal?.nom ?? 'Inc
 const [dateTime, setDateTime] = useState('now');
 const [data, setData] = useState([]);
 
+const [autres, setAutres] = useState(false);
+
+const changeAutres = (e) => {
+  setAutres(!autres);
+  // console.log(e.target.value);
+}
+
 const fetchPresence = async () => {
   const id = toast.loading('En cours ...',{isLoading: true})
         // setIsLoading(true);
-        // console.info(query)
-    await fetch(`${API.Local_Host_Name}/api/presences/month/${propsID ?? 2}/${dateTime}`, {
+        // console.info(propsID)
+        const pID = propsID == 0 ? 1 : propsID;
+    await fetch(`${API.Local_Host_Name}/api/presences/month/${pID ?? 2}/${dateTime}`, {
             method: 'GET',
             headers: {
               Accept: 'application/json',
@@ -145,11 +153,15 @@ useEffect(() => {
   fetchPresence();
 }, [dateTime])
 
+const percent = (e) => {
+  let pourcent = (parseInt(e) * 100) / 30;
+  return pourcent.toFixed();
+}
 
 const earningData = [
   {
     icon: <FaUserTie />,
-    amount: initialVal?.nom ?? 'Inconu',
+    amount: initialVal?.nom ?? 'Retournez, puis sélectionnez un employé.',
     percentage: '',
     title: '0',
     iconColor: '#03C9D7',
@@ -167,23 +179,31 @@ const earningData = [
   },
   {
     icon: <FaCalendarAlt />,
-    amount: `${data?.jours} jour(s)`,
-    percentage: '',
+    amount: `${data?.jours ?? 0} ${(data?.jours ?? 0) > 1 ? 'jours' : 'jour'}`,
+    percentage: `~${percent(data?.jours ?? 0)}%`,
     title: '2',
-    iconColor: 'rgb(228, 106, 118)',
-    iconBg: 'rgb(255, 244, 229)',
-
+    iconColor: 'rgb(0, 194, 146)',
+    iconBg: 'rgb(235, 250, 242)',
     pcColor: 'green-600',
   },
-  // {
-  //   icon: <HiOutlineRefresh />,
-  //   amount: '39,354',
-  //   percentage: '-12%',
-  //   title: 'Refunds',
-  //   iconColor: 'rgb(0, 194, 146)',
-  //   iconBg: 'rgb(235, 250, 242)',
-  //   pcColor: 'red-600',
-  // },
+  {
+    icon: <FaCalendarAlt />,
+    amount: `${data?.absencesJ ?? 0} Abs. just.`,
+    percentage: `~${percent(data?.absencesJ ?? 0)}%`,
+    title: '3',
+    iconColor: 'rgb(0, 194, 146)',
+    iconBg: 'rgb(235, 250, 242)',
+    pcColor: 'green-600',
+  },
+  {
+    icon: <FaCalendarAlt />,
+    amount: `${data?.absencesN ?? 0} Abs. non just.`,
+    percentage: `~${percent(data?.absencesN ?? 0)}%`,
+    title: '4',
+    iconColor: 'rgb(228, 106, 118)',
+    iconBg: 'rgb(255, 244, 229)',
+    pcColor: 'red-600',
+  },
 ];
 
 const chge = (args) => {
@@ -273,9 +293,9 @@ function onEventRendered(args) {
           style={{ width: '100%', background: 'white' }}
         >
           <tbody>
-            <tr style={{ height: 'auto' }}>
+            <tr style={{ height: 'auto' }} className='flex flex-col md:flex-row'>
               <td style={{ width: '25%' }}>
-                <DatePickerComponent
+                {!autres && <><DatePickerComponent
                   // value={new Date()}
                   showClearButton={false}
                   placeholder="Choisir une Date"
@@ -283,9 +303,16 @@ function onEventRendered(args) {
                   change={change}
                   locale='fr-CH'
                 />
+                <div className='h-0.5 mb-4 rounded-full' style={{backgroundColor: currentColor}}></div></>}
+                <Controls.Checkbox
+                        name="isPermanent"
+                        label="Autres évènements"
+                        value={autres}
+                        onChange={changeAutres}
+                    />
               </td>
-              <td style={{ width: '80%',alignItems: 'center', justifyContent: 'center' }}>
-                <MiniForm refresh={fetchPresence} ID={propsID} date={DateForm} color={currentColor}/>
+              <td style={{ width: '75%',alignItems: 'center', justifyContent: 'center' }}>
+                <MiniForm API={API} isAutres={autres} refresh={fetchPresence} ID={propsID} date={DateForm} color={currentColor}/>
               </td>
             </tr>
           </tbody>

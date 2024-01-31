@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logo from '../data/tintua_trans.png'
-import API from '../constants/Api';
+// import API from '../constants/Api';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 
@@ -14,12 +14,12 @@ const Connexion = () => {
 
   const goTo = useNavigate();
   
-  const {currentColor, setOnline} = useStateContext()
+  const {currentColor, setOnline, API, setUserR } = useStateContext()
 
   const Connecter = async () => {
       const id = toast.loading('En cours ...',{isLoading: true})
             // setIsLoading(true);
-            // console.info(query)
+            console.info(API)
         await fetch(`${API.Local_Host_Name}/api/user`, {
           // await fetch('http://localhost:8000/api/user', {
           // await fetch('http://tintua.000webhostapp.com/api/user', {
@@ -59,14 +59,11 @@ const Connexion = () => {
                     // console.log(new Date())
                     
                   } else{
-                    // setIsLoading(false);
-                    // setData(responseJson);
                     setOnline(true);
                     goTo("/acceuil");
                     toast.success(`${responseJson?.message}`);
-                    // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
-                    // setOK(true);
-                    console.log(`${responseJson} ${user}`)
+                    console.log(`${responseJson?.user[0]?.user} i${user}`)
+                    setUserR(responseJson?.user[0]?.user);
                   }
                 })
                 .catch(errors => {

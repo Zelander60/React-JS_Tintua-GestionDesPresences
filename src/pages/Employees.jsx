@@ -9,7 +9,8 @@ import useFetch from '../hooks/useFetch';
 import { loadCldr} from '@syncfusion/ej2-base';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import API from '../constants/Api';
+import { useStateContext } from '../contexts/ContextProvider';
+// import API from '../constants/Api';
 
 const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
 
@@ -28,6 +29,8 @@ const Employees = () => {
 
   const [dateTime, setDateTime] = useState('date');
   const [data, setData] = useState([]);
+  const { API } = useStateContext();
+
   // const [isLoading, setIsLoading] = useState(false);
   // const [ok, setOK] = useState(false);
   // const [error, setError] = useState(null);

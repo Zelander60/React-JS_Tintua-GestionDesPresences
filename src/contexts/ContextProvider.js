@@ -21,15 +21,30 @@ export const ContextProvider = ({ children }) => {
   const [propsID, setPropsID] = useState('0');
   const [type, setType] = useState('add');
   const [online, setOnline] = useState(false);
+  const [Actions, setActions] = useState(null);
+  const [API, setAPI] = useState({
+    Local_Host_Name : "http://192.168.0.222/api_presences/public",
+});
+const [UserR, setUserR] = useState("no");
 
-  // useEffect(() => {
-  //   if (online) {
-  //     const timeOut = setTimeout(()=>{
-  //       setOnline(false);
-  //     }, 10000)
-  //   }
-  // }, [online])
-  
+
+const appi = localStorage.getItem("api");
+
+useEffect(() => {
+  if (appi != '' && appi != null) {
+    setAPI({
+      Local_Host_Name : appi,
+    });
+  }
+}, [appi])
+  // let API = 
+
+const setApiper = (Apivalue) => {
+  setAPI({
+    Local_Host_Name : Apivalue,
+  });
+  localStorage.setItem("api", Apivalue);
+}
 
   const setMode = (e) => {
     setCurrentMode(e.target.value);
@@ -58,6 +73,12 @@ export const ContextProvider = ({ children }) => {
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <StateContext.Provider
       value={{
+        UserR,
+        setUserR,
+        API,
+        setApiper,
+        Actions,
+        setActions,
         online,
         setOnline,
         setPoper,

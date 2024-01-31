@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import API from "../constants/Api";
+// import API from "../constants/Api";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useStateContext } from "../contexts/ContextProvider";
 
 
 const useFetch = (endpoint, method, query) => {
@@ -15,6 +16,7 @@ const useFetch = (endpoint, method, query) => {
     // const if_contain = (text) => {
     //     text.
     // }
+    const { API } = useStateContext();
 
     const fetchData = async () => 
       {  

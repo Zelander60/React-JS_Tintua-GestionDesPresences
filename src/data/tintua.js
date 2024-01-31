@@ -84,10 +84,11 @@ const EmployeeGridStatus = (props) => (
    return (
    <div className="flex items-center justify-center py-2 gap-3">
     <button
+      key={1}
       onClick={()=>{
         setPoperPop( true, initial, props.id );
-        // console.warn(props.id)
         setType('edit');
+        // console.warn(props.id)
       }}
       type="button"
       style={{ background: CurrColor() }}
@@ -98,9 +99,10 @@ const EmployeeGridStatus = (props) => (
     </button>
 
     <button
+      key={2}
       onClick={()=>{
-        setPoperPop( true, initial, props.id );
         setType('delete');
+        setPoperPop( true, initial, props.id );
       }}
       type="button"
       style={{ background: '#FB9678' }}
@@ -124,6 +126,64 @@ const EmployeeGridStatus = (props) => (
       <FaEye size={20} />
 
     </NavLink>
+    
+    </div>)
+  }
+
+  const actions = (props) => {
+    const { setPoperPop, setType, setActions } = useStateContext();
+    const sorties = {
+      sID: `${props.id}`,
+      sNo: `${''}`,
+      Nom: `${props.nom}`,
+      HeureA: `${props.HeureA}`,
+      HeureD: `${props.HeureD}`,
+      Motifs: `${props.Observations}`,
+    }
+   return (
+   <div className="flex items-center justify-center py-2 gap-3">
+    <button
+      onClick={()=>{
+        setActions(sorties);
+        // setPoperPop( true, initial, props.id );
+        console.warn(props)
+        // setType('edit');
+      }}
+      type="button"
+      style={{ background: CurrColor() }}
+      className="text-white p-1.5 rounded-lg ease-in-out delay-15 hover:scale-110"
+    >
+      <FaEye size={20} />
+    </button>
+
+    <button
+      onClick={()=>{
+        setActions(sorties);
+        // setPoperPop( true, initial, props.id );
+        // setType('delete');
+      }}
+      type="button"
+      style={{ background: '#FB9678' }}
+      className="text-white p-1.5 rounded-lg transition ease-in-out delay-15 hover:scale-110"
+    >
+      <AiOutlineUserDelete size={20} />
+
+    </button>
+
+    {/* <NavLink
+      to={"/calendrier"}
+      onClick={()=>{
+        setPoperPop( false, initial, props.id );
+        // console.warn(props.id)
+        // setType('edit');
+      }}
+      type="button"
+      style={{ background: CurrColor() }}
+      className="text-white p-1.5 rounded-lg ease-in-out delay-15 hover:scale-110"
+    >
+      <FaEye size={20} />
+
+    </NavLink>  */}
     
     </div>)
   }
@@ -177,7 +237,7 @@ export const TintuaEmployeesGrid = [
     field: "nom",
     headerText: "Nom et Prénoms de l'agent",
     template: gridEmployeeProfile,
-    width: "250",
+    width: "240",
     textAlign: "Justify",
   },
 
@@ -273,12 +333,12 @@ export const TintuaSortiesGrid = [
     textAlign: "Justify",
   },
 
-  {
-    field: "fonction",
-    headerText: "Fonction",
-    width: "100",
-    textAlign: "Center",
-  },
+  // {
+  //   field: "fonction",
+  //   headerText: "Fonction",
+  //   width: "100",
+  //   textAlign: "Center",
+  // },
 
   {
     field: "HeureA",
@@ -302,6 +362,15 @@ export const TintuaSortiesGrid = [
     width: "100",
     textAlign: "Center",
   },
+
+  {
+    field: "fonction",
+    headerText: "Actions",
+    template: actions,
+    width: "100",
+    textAlign: "Center",
+  },
+
 ];
 
 

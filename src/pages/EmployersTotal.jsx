@@ -28,7 +28,7 @@ export const Rendre= (action) =>{
 
 const EmployersTotal = () => {
 
-  const { currentColor, type, setType, setPoper } = useStateContext();
+  const { currentColor, type, setType, setPoper, API } = useStateContext();
 
   loadCldr(
     require('cldr-data/supplemental/numberingSystems.json'),
