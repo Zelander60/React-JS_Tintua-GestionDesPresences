@@ -16,11 +16,11 @@ const useFetch = (endpoint, method, query) => {
     // const if_contain = (text) => {
     //     text.
     // }
-    const { API } = useStateContext();
+    const { API, handleAllDatas } = useStateContext();
 
     const fetchData = async () => 
       {  
-        const id = toast.loading('En cours ...',{isLoading: true})
+        const idd = toast.loading('En cours ...',{isLoading: true})
         setIsLoading(true);
         // console.info(query)
     await fetch(`${API.Local_Host_Name}/api/${endpoint}`, {
@@ -50,7 +50,13 @@ const useFetch = (endpoint, method, query) => {
               } else{
                 // setIsLoading(false);
                 setData(responseJson);
-                endpoint !== 'employers' ? toast.success(`${responseJson?.message}`) : '';
+                const empDatas = responseJson?.employers.map((val)=>({
+                  ordre: val.ordre,
+                  nom: val.nom
+                }));
+                console.log(empDatas[1].title);
+                endpoint !== 'employers' ? toast.success(`${responseJson?.message}`)
+                                         : handleAllDatas('employers', empDatas);
                 // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
                 setOK(true);
                 console.log(responseJson)
@@ -63,7 +69,7 @@ const useFetch = (endpoint, method, query) => {
               setError(errors);
             })
             .finally(()=>{
-              toast.dismiss(id);
+              toast.dismiss(idd);
               setIsLoading(false);
             });
     }

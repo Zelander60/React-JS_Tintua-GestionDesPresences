@@ -157,7 +157,7 @@ function MiniForm({ID, refresh, date, color, isAutres, API}) {
               }) :
               JSON.stringify({
                 'type': 'autre',
-                'date': HA2,
+                'date': `${HA2}`,
             }),
               })
               .then(response => {

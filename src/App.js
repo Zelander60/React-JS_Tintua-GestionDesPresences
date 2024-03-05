@@ -14,6 +14,8 @@ import Accueil from './pages/Accueil';
 import Sorties from './pages/Sorties';
 import Connexion from './pages/Connexion';
 import Offline from './pages/Offline';
+import Absences from './pages/Absences';
+import ConnexionEmp from './pages/ConnexionEmp';
 
 const App = () => {
 
@@ -72,7 +74,9 @@ const App = () => {
 
               <Routes>
                 {/* dashboard  */}
-                <Route path="/" element={(<Connexion />)} />
+                <Route path="/tintua" element={(<Connexion />)} />
+                <Route path="/*" element={(<ConnexionEmp />)} />
+                <Route path="/user" element={(<ConnexionEmp/>)} />
                 <Route path="/acceuil" element={(online ? <Accueil /> : <Offline />)} />
 
                 {/* pages  */}
@@ -80,6 +84,7 @@ const App = () => {
                 <Route path="/presences" element={online ? <Employees /> : <Offline />} />
                 <Route path="/listeEmployes" element={online ? <EmployersTotal /> : <Offline />} />
                 <Route path="/sorties" element={online ? <Sorties /> : <Offline />} />
+                <Route path="/absences" element={online ? <Absences /> : <Offline />} />
 
                 {/* <Route path="/customers" element={<Customers />} /> */}
 

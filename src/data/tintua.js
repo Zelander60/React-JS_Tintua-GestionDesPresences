@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { GrLocation, GrUser } from "react-icons/gr";
-import avatar3 from "./avatar3.png";
-import avatar4 from "./avatar4.jpg";
 import { useStateContext } from '../contexts/ContextProvider';
-import { oui, referer } from "../pages/EmployersTotal";
 import Popup from "../components/Popup";
 import EmployeeForm from "../pages/Employees/EmployeeForm";
 import * as employeeService from "../services/employeeService";
 import { TbUserEdit } from "react-icons/tb";
 import { AiOutlineUserDelete } from "react-icons/ai";
 import { FaEye } from "react-icons/fa6";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { BsFillHouseAddFill } from "react-icons/bs";
+import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
 
 const CurrColor = () => {
@@ -35,11 +34,11 @@ function randomNumberInRange(min, max) {
 const gridEmployeeProfile = (props) => (
   <div className="flex flex-row gap-2">
     <div className={`w-6 h-6 rounded-full ${randomNumberInRange(0,colorH.length - 1)} flex items-center justify-center`}>
-      <p className="py-1 px-2">{props?.nom[0] ? props?.nom[0] : 'C'}</p>
+      <p className="py-1 px-2">{props?.nom[0] ?? 'C'}</p>
     </div>
 
     <div className="flex flex-row items-center gap-2">
-      <p className="truncate">{props?.nom ? props?.nom : 'chargement...'}</p>
+      <p className="truncate">{props?.nom ?? 'chargement...'}</p>
     </div>
   </div>
 );
@@ -47,7 +46,7 @@ const gridEmployeeProfile = (props) => (
 const gridEmployeeCountry = (props) => (
   <div className="flex items-center justify-center gap-2">
     <GrLocation />
-    <span>{props?.lieu ? props?.lieu : 'Fada' }</span>
+    <span>{props?.lieu ?? 'Fada' }</span>
   </div>
 );
 
@@ -66,29 +65,35 @@ const renderTime = (text) =>{
 
 const EmployeeGridStatus = (props) => (
     <div className="flex gap-2 justify-center items-center text-gray-700 capitalize">
-      <p style={{ background: renderTime(props?.HeureA ? props?.HeureA : '0:0') }} className="rounded-full h-3 w-3" />
+      <p style={{ background: renderTime(props?.HeureA ?? '0:0') }} className="rounded-full h-3 w-3" />
       <p>{props?.HeureA}</p>
     </div>
   );
 
 
   const buttonDelete = (props) => {
-    const { setPoperPop, setType } = useStateContext();
+    const { UserR, setPoperPop, setType, setIsNewSortie } = useStateContext();
     const initial = {
       ordre: `${props.ordre}`,
       nom: `${props.nom}`,
       email: `${props.email}`,
+      password: `${props.password}`,
       fonction: `${props.fonction}`,
+      n1: props.n1,
+      projet: props.projet,
       lieu: `${props.lieu}`,
     }
+    const goTo = useNavigate();
    return (
    <div className="flex items-center justify-center py-2 gap-3">
+
+    <TooltipComponent content={`Editer les informations de ${initial.nom}`}>
     <button
-      key={1}
+      // key={1}
       onClick={()=>{
         setPoperPop( true, initial, props.id );
         setType('edit');
-        // console.warn(props.id)
+        console.warn(props.projet)
       }}
       type="button"
       style={{ background: CurrColor() }}
@@ -97,9 +102,30 @@ const EmployeeGridStatus = (props) => (
       <TbUserEdit size={20} />
 
     </button>
+    </TooltipComponent>
 
+
+    {UserR?.role == "admin" && <TooltipComponent content={`Nouvelle Sortie de ${initial.nom}`}>
     <button
-      key={2}
+      // key={3}
+      onClick={()=>{
+        setPoperPop( false, initial, props.id );
+        setIsNewSortie(true);
+        // console.warn(props.id)
+      }}
+      type="button"
+      style={{ background: CurrColor() }}
+      className="text-white p-1.5 rounded-lg ease-in-out delay-15 hover:scale-110"
+    >
+      <BsFillHouseAddFill size={20} />
+
+    </button>
+    </TooltipComponent>
+    }
+
+    <TooltipComponent content={`Supprimer ${initial.nom}`}>
+    <button
+      // key={2}
       onClick={()=>{
         setType('delete');
         setPoperPop( true, initial, props.id );
@@ -109,15 +135,15 @@ const EmployeeGridStatus = (props) => (
       className="text-white p-1.5 rounded-lg transition ease-in-out delay-15 hover:scale-110"
     >
       <AiOutlineUserDelete size={20} />
-
     </button>
+    </TooltipComponent>
 
-    <NavLink
-      to={"/calendrier"}
+
+    <TooltipComponent content={`Voir le calendrier de ${initial.nom}`}>
+    <button
       onClick={()=>{
         setPoperPop( false, initial, props.id );
-        // console.warn(props.id)
-        // setType('edit');
+        goTo("/calendrier");
       }}
       type="button"
       style={{ background: CurrColor() }}
@@ -125,20 +151,27 @@ const EmployeeGridStatus = (props) => (
     >
       <FaEye size={20} />
 
-    </NavLink>
+    </button>
+    </TooltipComponent>
     
     </div>)
   }
 
   const actions = (props) => {
-    const { setPoperPop, setType, setActions } = useStateContext();
+    const { setOpenSS, setActions } = useStateContext();
     const sorties = {
       sID: `${props.id}`,
-      sNo: `${''}`,
+      sNo: `${props.rang}`,
       Nom: `${props.nom}`,
       HeureA: `${props.HeureA}`,
       HeureD: `${props.HeureD}`,
       Motifs: `${props.Observations}`,
+    }
+    const sortiesSuppr = {
+      Nom: `${props.nom}`,
+      sID: `${props.id}`,
+      sNo: `${props.rang}`,
+      sType: "suppr",
     }
    return (
    <div className="flex items-center justify-center py-2 gap-3">
@@ -158,9 +191,8 @@ const EmployeeGridStatus = (props) => (
 
     <button
       onClick={()=>{
-        setActions(sorties);
-        // setPoperPop( true, initial, props.id );
-        // setType('delete');
+        setActions(sortiesSuppr);
+        setOpenSS(true);
       }}
       type="button"
       style={{ background: '#FB9678' }}
@@ -169,29 +201,18 @@ const EmployeeGridStatus = (props) => (
       <AiOutlineUserDelete size={20} />
 
     </button>
-
-    {/* <NavLink
-      to={"/calendrier"}
-      onClick={()=>{
-        setPoperPop( false, initial, props.id );
-        // console.warn(props.id)
-        // setType('edit');
-      }}
-      type="button"
-      style={{ background: CurrColor() }}
-      className="text-white p-1.5 rounded-lg ease-in-out delay-15 hover:scale-110"
-    >
-      <FaEye size={20} />
-
-    </NavLink>  */}
     
     </div>)
   }
 
-// export const PopUp = () => {
-//   return 
-// }
-
+  const gridNumProfile = (props) => (
+    <div className="flex items-center justify-center py-2">
+      <div className={`self-center w-6 h-6 rounded-md bg-sky-900 flex items-center justify-center`}>
+        <p className="py-1 px-2 text-white">{props.rang ?? '0'}</p>
+      </div>
+    </div>
+  );
+ 
 export const TintuaEmployeesData = [
   {
     ordre: 1,
@@ -319,8 +340,9 @@ export const TintuaArriverGrid = [
 
 export const TintuaSortiesGrid = [
   {
-    field: "ordre",
-    headerText: "Ordre",
+    field: "rang",
+    headerText: "N° Sortie",
+    template: gridNumProfile,
     width: "100",
     textAlign: "Center",
   },
@@ -330,7 +352,7 @@ export const TintuaSortiesGrid = [
     headerText: "Nom et Prénoms de l'agent",
     template: gridEmployeeProfile,
     width: "200",
-    textAlign: "Justify",
+    textAlign: "Center",
   },
 
   // {

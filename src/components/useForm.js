@@ -17,6 +17,26 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
             validate({ [name]: value })
     }
 
+    const handleAutoComplete = (nom, value) => {
+        
+        if (nom == 'projet') {
+            const tValue = value.filter((v)=> v != 'Aucun');
+            setValues({
+                ...values,
+                [nom]: tValue.length > 0 ? tValue : ['Aucun']
+            })
+        }else if (nom == 'n1') {
+            setValues({
+                ...values,
+                [nom]: value != null && value != '' && value.nom != null ? value : {nom: '', ordre: 0}
+            })
+            console.warn(value)
+        }
+        
+        // if (validateOnChange)
+        //     validate({ ['projet']: value })
+    }
+
     const val = ()=>{
        return (parseInt(localStorage.getItem('Tordre')) + 1).toString()
     }
@@ -37,8 +57,8 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         errors,
         setErrors,
         handleInputChange,
-        resetForm
-
+        resetForm,
+        handleAutoComplete
     }
 }
 

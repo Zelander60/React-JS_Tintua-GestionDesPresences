@@ -15,6 +15,7 @@ import { FiUserPlus } from "react-icons/fi";
 import Popup from '../components/Popup';
 import EmployeeForm from './Employees/EmployeeForm';
 import * as employeeService from "../services/employeeService";
+import MiniSortiesNew from './MiniSortiesNew';
 
 
 
@@ -28,7 +29,7 @@ export const Rendre= (action) =>{
 
 const EmployersTotal = () => {
 
-  const { currentColor, type, setType, setPoper, API } = useStateContext();
+  const { currentColor, type, setType, setPoper, API, initialVal, isNewSortie, setIsNewSortie, propsID } = useStateContext();
 
   loadCldr(
     require('cldr-data/supplemental/numberingSystems.json'),
@@ -150,6 +151,14 @@ const EmployersTotal = () => {
                   close={setPoper}
                 />
             </Popup>
+
+  <Popup
+    title={`Nouvelle sortie de "${initialVal?.nom ?? ''}" ?`}
+    openPopup={isNewSortie}
+    setOpenPopup={setIsNewSortie}
+  >
+    <MiniSortiesNew API={API} iid={propsID} initial={initialVal} active={setIsNewSortie} color={currentColor}/>
+ </Popup>
 
     </div>
   );

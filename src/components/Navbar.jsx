@@ -46,7 +46,7 @@ const NavButton2 = ({ title, customFunc, icon, color, dotColor }) => (
 );
 
 const Navbar = () => {
-  const { currentColor, UserR, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
+  const { currentColor, UserR, API, activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
 
   useEffect(() => {
     const handleResize = () => setScreenSize(window.innerWidth);
@@ -75,22 +75,23 @@ const Navbar = () => {
       <div className="flex">
         {/* <NavButton title="Cart" customFunc={() => handleClick('cart')} color={currentColor} icon={<FiShoppingCart />} /> */}
         {/* <NavButton title="Chat" dotColor="#03C9D7" customFunc={() => handleClick('chat')} color={currentColor} icon={<BsChatLeft />} /> */}
-        <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('notification')} color={currentColor} icon={<RiNotification3Line />} />
-        <NavButton title="Params" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('params')} color={currentColor} icon={<IoSettings />} />
-        <TooltipComponent content="Profile" position="BottomCenter">
+{  UserR?.role != '' && <NavButton title="Notification" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('notification')} color={currentColor} icon={<RiNotification3Line />} />
+}        
+{ UserR?.role != '' && <NavButton title="Params" dotColor="rgb(254, 201, 15)" customFunc={() => handleClick('params')} color={currentColor} icon={<IoSettings />} />
+}        <TooltipComponent content="Profile" position="BottomCenter">
           <div
             className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg"
             onClick={() => handleClick('userProfile')}
           >
             <img
               className="rounded-full w-8 h-8"
-              src={avatar}
+              src={`${API.Local_Host_Name}/../storage/app/${UserR?.image ?? "public/uploads/profiles/default.png"}`}
               alt="user-profile"
             />
             <p>
               <span className="text-gray-400 text-14">Hi,</span>{' '}
               <span className="text-gray-400 font-bold ml-1 text-14">
-                RH
+                {UserR?.nom ?? '...'}
               </span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />

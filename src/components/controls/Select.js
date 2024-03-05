@@ -13,9 +13,9 @@ export default function Select(props) {
                 label={label}
                 name={name}
                 value={value}
-                className='flex-1 w-40'
+                className='flex-1 max-h-14'
                 onChange={onChange}>
-                <MenuItem value="">None</MenuItem>
+                <MenuItem value="">Aucun</MenuItem>
                 {
                     options.map(
                         item => (<MenuItem key={item.id} value={item.id}>{item.title}</MenuItem>)

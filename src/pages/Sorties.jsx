@@ -17,7 +17,7 @@ const PropertyPane = (props) => <div className="flex mt-5">{props.children}</div
 
 const Sorties = () => {
 
-  const { currentColor, Actions, API } = useStateContext();
+  const { UserR, currentColor, Actions, API, setActions, OpenSS, setOpenSS } = useStateContext();
 
   loadCldr(
     require('cldr-data/supplemental/numberingSystems.json'),
@@ -33,6 +33,8 @@ const Sorties = () => {
   const [dateTime, setDateTime] = useState('date');
   const [data, setData] = useState([]);
   const [DateForm, setDateForm] = useState('');
+  const [TD, setTD] = useState([]);
+
   // const [ok, setOK] = useState(false);
   // const [error, setError] = useState(null);
 
@@ -41,13 +43,17 @@ const Sorties = () => {
           // setIsLoading(true);
           // console.info(query)
       await fetch(`${API.Local_Host_Name}/api/sorties/jour/${dateTime}`, {
-              method: 'GET',
+              method: 'POST',
               headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
               },
   
-              // body: JSON.stringify(query),
+              body: UserR?.role != '' ? null :
+                JSON.stringify({
+                  UserType: "user",
+                  UserOrdre: UserR?.ordre,
+                }),
             })
             .then(response => {
               if (!response.ok) {
@@ -88,6 +94,14 @@ const Sorties = () => {
 
   useEffect(() => {
     fetchPresence();
+    setActions({
+      sID: '',
+      sNo: '',
+      Nom: '...',
+      HeureA: '',
+      HeureD: '',
+      Motifs: '',
+    })
   }, [dateTime])
 
   const change = (args) => {
@@ -162,7 +176,7 @@ const Sorties = () => {
       </GridComponent>
 
 
-      <PropertyPane>
+      { UserR?.role == "admin" && <PropertyPane>
       <div className="flex m-3 flex-wrap justify-center gap-1 items-center">
             <div className="flex flex-col bg-gray-50 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-56 gap-4 p-4 rounded-2xl ">
               <button
@@ -181,9 +195,12 @@ const Sorties = () => {
             </div>
         </div>
        <div className='flex'>
-        <MiniSorties API={API} actions={Actions} refresh={fetchPresence} date={DateForm} color={currentColor}/>
+              
+        <MiniSorties API={API} opS={OpenSS} setOps={setOpenSS} actions={Actions} refresh={fetchPresence} date={dateTime} color={currentColor}/>
+        
        </div>
       </PropertyPane>
+      }
 
 
       <ToastContainer

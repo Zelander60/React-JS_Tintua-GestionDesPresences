@@ -9,6 +9,14 @@ const initialState = {
   notification: false,
 };
 
+const entiers = {
+  employers: null,
+  fonction: null,
+  ville: null,
+  absence: null,
+  service: null,
+};
+
 export const ContextProvider = ({ children }) => {
   const [screenSize, setScreenSize] = useState(undefined);
   const [currentColor, setCurrentColor] = useState("#03C9D7");
@@ -25,7 +33,10 @@ export const ContextProvider = ({ children }) => {
   const [API, setAPI] = useState({
     Local_Host_Name : "http://192.168.0.222/api_presences/public",
 });
-const [UserR, setUserR] = useState("no");
+const [UserR, setUserR] = useState(null);
+const [isNewSortie, setIsNewSortie] = useState(false);
+const [OpenSS, setOpenSS] = useState(false);
+const [AllDatas, setAllDatas] = useState(entiers);
 
 
 const appi = localStorage.getItem("api");
@@ -69,10 +80,23 @@ const setApiper = (Apivalue) => {
       [clicked]: true,
     });
 
+  const handleAllDatas = (name,values) =>
+    setAllDatas({
+      ...AllDatas,
+      [name]: values,
+    }
+  );
+
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <StateContext.Provider
       value={{
+        handleAllDatas,
+        AllDatas,
+        setOpenSS,
+        OpenSS,
+        isNewSortie,
+        setIsNewSortie,
         UserR,
         setUserR,
         API,
@@ -85,6 +109,7 @@ const setApiper = (Apivalue) => {
         type,
         setType,
         propsID,
+        setPropsID,
         initialVal,
         poper,
         setPoperPop,

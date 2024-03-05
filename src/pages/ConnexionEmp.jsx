@@ -7,20 +7,20 @@ import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 
 
-const Connexion = () => {
+const ConnexionEmp = () => {
 
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
 
   const goTo = useNavigate();
   
-  const {currentColor, setOnline, API, setUserR } = useStateContext()
+  const {currentColor, setPropsID, setOnline, API, setUserR } = useStateContext()
 
   const Connecter = async () => {
       const id = toast.loading('En cours ...',{isLoading: true})
             // setIsLoading(true);
             console.info(API)
-        await fetch(`${API.Local_Host_Name}/api/user`, {
+        await fetch(`${API.Local_Host_Name}/api/tintua`, {
           // await fetch('http://localhost:8000/api/user', {
           // await fetch('http://tintua.000webhostapp.com/api/user', {
             // credentials: "omit",
@@ -29,7 +29,7 @@ const Connexion = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              'user': user,
+              'ordre': user,
               'password': password,
             }),
 
@@ -60,10 +60,11 @@ const Connexion = () => {
                     
                   } else{
                     setOnline(true);
-                    goTo("/acceuil");
+                    goTo("/presences");
                     toast.success(`${responseJson?.message}`);
-                    console.log(`${responseJson?.user[0]?.user} i${user}`)
+                    console.log(`${responseJson?.user[0]?.n1} i ${responseJson?.user[0]}`)
                     setUserR(responseJson?.user[0] ?? null);
+                    setPropsID(responseJson?.user[0]?.id ?? 0);
                   }
                 })
                 .catch(errors => {
@@ -105,7 +106,7 @@ const Connexion = () => {
             <form className="space-y-6" method="">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                  Nom d'utilisateur
+                  N° d'ordre
                 </label>
                 <div className="mt-2">
                   <input
@@ -127,9 +128,9 @@ const Connexion = () => {
                     Mot de passe
                   </label>
                   <div className="text-sm">
-                    <a href="/acceuil" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Oublié?
-                    </a>
+                    {/* <a href="/acceuil" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                      Oubliémm?
+                    </a> */}
                   </div>
                 </div>
                 <div className="mt-2">
@@ -178,4 +179,4 @@ const Connexion = () => {
   }
   
 
-  export default Connexion;
+  export default ConnexionEmp;

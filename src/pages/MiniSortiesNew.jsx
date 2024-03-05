@@ -1,41 +1,53 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 // import API from '../constants/Api';
-import { FaUserTie } from 'react-icons/fa6';
-import Popup from '../components/Popup';
+import { loadCldr} from '@syncfusion/ej2-base';
+import { DatePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { useNavigate } from 'react-router-dom';
 
-function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
-    const [HA, setHA] = useState(actions?.HeureA ?? '');
-    const [HD, setHD] = useState(actions?.HeureD ?? '');
-    const [Obs, setObs] = useState(actions?.Motifs ?? '');
-    const [No, setNo] = useState(actions?.sNo ?? 0);
-    const [IID, setIID] = useState(actions?.sID ?? 0);
-    const [sType, setsType] = useState(actions?.sType ?? '');
+function MiniSortiesNew({initial, color, active, API, iid}) {
+    const [HA, setHA] = useState('');
+    const [HD, setHD] = useState('');
+    const [Obs, setObs] = useState('');
+    const [No, setNo] = useState('new');
+    const [dateT, setDateT] = useState('auto');
 
-    useEffect(() => {
-        setHA(actions?.HeureA ?? '');
-        setHD(actions?.HeureD ?? '');
-        setObs(actions?.Motifs ?? '');
-        setNo(actions?.sNo ?? 'new');
-        setIID(actions?.sID ?? '0');
-        setsType(actions?.sType ?? '');
-    }, [actions])
+    loadCldr(
+        require('cldr-data/supplemental/numberingSystems.json'),
+        require('cldr-data/main/fr-CH/ca-gregorian.json'),
+        require('cldr-data/main/fr-CH/numbers.json'),
+        require('cldr-data/main/fr-CH/timeZoneNames.json')
+      );
+
+      const goTo = useNavigate();
+
+    // useEffect(() => {
+    //     setIID(initial?.id ?? '0');
+    // }, [initial])
+
+    const change = (args) => {
+        /* eslint-disable no-console */
+        let fresh2 = "";
+        let fresh = (args.value).toLocaleDateString();
+        fresh2 = (args.value).toString();
+        let take = fresh2.split(" ");
+        let date = fresh.replace(/\//gi, '-');
+        let ba = `${take[1]}${take[3]}`
+        let base = ba.toLowerCase();
+        console.log(`${date}.${base}`);
+        setDateT(`${date}.${base}`);
+      };
 
     const fetchPresence = async () => {
         const idd = toast.loading('En cours ...',{isLoading: true})
-        const dateF = date == "date" ? "auto" : date ;
-        await fetch(`${API.Local_Host_Name}/api/sorties/update/${actions?.sID ?? IID}/${dateF}`, {
+
+        await fetch(`${API.Local_Host_Name}/api/sorties/update/${iid}/${dateT}`, {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/json',
                 },
-                body: sType == "suppr" ? 
-                JSON.stringify({
-                    'rang': No,
-                    'sType': "suppr",
-                }) :
-                JSON.stringify({
+                body: JSON.stringify({
                     'rang': No,
                     'HeureA': HA,
                     'HeureD': HD,
@@ -59,7 +71,8 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
                     
                   } else{
                     
-                    refresh();
+                    active(false);
+                    goTo("/sorties");
                     toast.success(`${responseJson?.message}`);
                     // console.log(responseJson)
                   }
@@ -80,9 +93,18 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
 
       <div className='flex flex-row gap-8'>
 
+    <DatePickerComponent
+        // value={new Date()}
+        showClearButton={false}
+        placeholder="Choisir une Date"
+        floatLabelType="Always"
+        change={change}
+        locale='fr-CH'
+    />
+
       <div>
         <label htmlFor="ha" className="block text-sm font-medium leading-6 text-gray-900">
-            Heure de Sortie
+            H. Sortie
         </label>
         <div className="mt-2">
           <input
@@ -102,7 +124,7 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
       <div>
         <div className="flex items-center justify-between">
           <label htmlFor="hd" className="block text-sm font-medium leading-6 text-gray-900">
-            Heure de Retour
+            H. Retour
           </label>
         </div>
         <div className="mt-2">
@@ -145,29 +167,6 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
         </div>
       </div>
 
-      {/* <div>
-        <div className="flex items-center justify-between">
-          <label htmlFor="obs" className="block text-sm font-medium leading-6 text-gray-900">
-            No. sortie
-          </label>
-        </div>
-        <div className="mt-2">
-          <input
-            id="obs"
-            name="obs"
-            type="number"
-            autoComplete="name"
-            required
-            value={No}
-            placeholder='RAS'
-            onChange={(e)=>{
-                console.warn(actions)
-                setNo(e.target.value)}}
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          />
-        </div>
-      </div> */}
-
       <div className='self-end'>
         <button
           type="button"
@@ -183,36 +182,8 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
       
     </form>
 
-    <Popup
-    title={`Supprimer la sortie N° ${No} de ${actions?.Nom} ?  `}
-    openPopup={opS}
-    setOpenPopup={setOps}
-    >
-      <div className='flex flex-row self-end justify-between gap-4'>
-        <button
-          type="button"
-          onClick={()=>{
-            fetchPresence();
-            setOps(false);
-          }}
-          style={{ background: color,}}
-          className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          OUI
-        </button>
-        <button
-          type="button"
-          onClick={()=>setOps(false)}
-          style={{ background: "#FF5C8E",}}
-          className="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          NON
-        </button>
-      </div>
-    </Popup>
-
   </div>
   )
 }
 
-export default MiniSorties
+export default MiniSortiesNew

@@ -4,12 +4,12 @@ import { SiShopware } from 'react-icons/si';
 import { MdOutlineCancel } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
-import { links } from '../data/dummy';
+import { links, UsersLinks } from '../data/dummy';
 import { useStateContext } from '../contexts/ContextProvider';
 import avatar from '../data/tintua_trans.png';
 
 const Sidebar = () => {
-  const { currentColor, activeMenu, setActiveMenu, screenSize } = useStateContext();
+  const { UserR, currentColor, activeMenu, setActiveMenu, screenSize } = useStateContext();
 
   const handleCloseSideBar = () => {
     if (activeMenu !== undefined && screenSize <= 900) {
@@ -25,7 +25,9 @@ const Sidebar = () => {
       {activeMenu && (
         <>
           <div className="flex justify-between items-center">
-            <Link to="/acceuil" onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
+            <Link 
+            to={UserR?.role != '' ? "/acceuil" : "/presences"}
+            onClick={handleCloseSideBar} className="items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900">
               {/* <SiShopware color={currentColor} />  */}
               <img
                 className="rounded-full w-8 h-8"
@@ -45,7 +47,27 @@ const Sidebar = () => {
             </TooltipComponent>
           </div>
           <div className="mt-10 ">
-            {links.map((item) => (
+            {UserR?.role != '' && UserR?.role != null ? links.map((item) => (
+              <div key={item.title}>
+                <p className="flex text-gray-400 dark:text-gray-400 w-3/5 p-2 pl-4 mb-4 rounded-r-full bg-light-gray px-1 mt-4 uppercase">
+                  {item.title}
+                </p>
+                {item.links.map((link) => (
+                  <NavLink
+                    to={`/${link.name}`}
+                    key={link.name}
+                    onClick={handleCloseSideBar}
+                    style={({ isActive }) => ({
+                      backgroundColor: isActive ? currentColor : '',
+                    })}
+                    className={({ isActive }) => (isActive ? activeLink : normalLink)}
+                  >
+                    {link.icon}
+                    <span className="capitalize ">{link.desc}</span>
+                  </NavLink>
+                ))}
+              </div>
+            )) : UsersLinks.map((item) => (
               <div key={item.title}>
                 <p className="flex text-gray-400 dark:text-gray-400 w-3/5 p-2 pl-4 mb-4 rounded-r-full bg-light-gray px-1 mt-4 uppercase">
                   {item.title}

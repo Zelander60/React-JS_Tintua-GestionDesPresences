@@ -14,7 +14,7 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
 
-const Employees = () => {
+const Absences = () => {
 
   loadCldr(
     require('cldr-data/supplemental/numberingSystems.json'),
@@ -29,7 +29,7 @@ const Employees = () => {
 
   const [dateTime, setDateTime] = useState('date');
   const [data, setData] = useState([]);
-  const { UserR, API } = useStateContext();
+  const { API } = useStateContext();
 
   // const [isLoading, setIsLoading] = useState(false);
   // const [ok, setOK] = useState(false);
@@ -41,17 +41,13 @@ const Employees = () => {
             // setIsLoading(true);
             // console.info(query)
         await fetch(`${API.Local_Host_Name}/api/presences/jour/${dateTime}`, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/json',
                 },
     
-                body: UserR?.role != '' ? null :
-                JSON.stringify({
-                  UserType: "user",
-                  UserOrdre: UserR?.ordre,
-                }),
+                // body: JSON.stringify(query),
               })
               .then(response => {
                 if (!response.ok) {
@@ -107,7 +103,7 @@ const Employees = () => {
 
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
-      <Header category="Page" title="Présences" />
+      <Header category="Page" title="Absences" />
       <PropertyPane>
         <table
           style={{ width: '30%', background: 'white' }}
@@ -128,7 +124,7 @@ const Employees = () => {
           </tbody>
         </table>
       </PropertyPane>
-      <GridComponent
+      {/* <GridComponent
         dataSource={data.data}
         width="auto"
         allowPaging
@@ -142,7 +138,6 @@ const Employees = () => {
         allowExcelExport
       >
         <ColumnsDirective>
-          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
           {TintuaArriverGrid.map((item, index) => <ColumnDirective key={index} {...item} />)}
         </ColumnsDirective>
         <Inject services={[Search, Page, ExcelExport, ContextMenu]} />
@@ -159,8 +154,8 @@ const Employees = () => {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme="colored" />
+      theme="colored" /> */}
     </div>
   );
 };
-export default Employees;
+export default Absences;

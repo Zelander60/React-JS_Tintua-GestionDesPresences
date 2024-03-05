@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ScheduleComponent, ViewsDirective, ViewDirective, Day, Month, Agenda,ExcelExport, Inject, Resize } from '@syncfusion/ej2-react-schedule';
 import { DatePickerComponent, DateTimePicker, TimePickerComponent } from '@syncfusion/ej2-react-calendars';
 
-import { scheduleData } from '../data/dummy';
-import { Header } from '../components';
 import { Ajax, loadCldr, L10n} from '@syncfusion/ej2-base';
 import { FaCalendarAlt, FaUserTie, FaBriefcase, FaArrowLeft } from "react-icons/fa";
 import { useStateContext } from '../contexts/ContextProvider';
@@ -69,7 +67,7 @@ L10n.load(localJSON);
     }
 }
 
-const { currentColor, propsID, initialVal, API } = useStateContext();
+const { UserR, currentColor, propsID, initialVal, API } = useStateContext();
 
 const onExportClick = () => {
   let customFields = [
@@ -98,8 +96,8 @@ const fetchPresence = async () => {
   const id = toast.loading('En cours ...',{isLoading: true})
         // setIsLoading(true);
         // console.info(propsID)
-        const pID = propsID == 0 ? 1 : propsID;
-    await fetch(`${API.Local_Host_Name}/api/presences/month/${pID ?? 2}/${dateTime}`, {
+        const pID = propsID == 0 ? 0 : propsID;
+    await fetch(`${API.Local_Host_Name}/api/presences/month/${pID ?? 0}/${dateTime}`, {
             method: 'GET',
             headers: {
               Accept: 'application/json',
@@ -161,7 +159,7 @@ const percent = (e) => {
 const earningData = [
   {
     icon: <FaUserTie />,
-    amount: initialVal?.nom ?? 'Retournez, puis sélectionnez un employé.',
+    amount: initialVal?.nom ?? ( UserR?.role != '' ? 'Retournez, puis sélectionnez un employé.' : (UserR?.nom ?? 'Employé')),
     percentage: '',
     title: '0',
     iconColor: '#03C9D7',
@@ -170,7 +168,7 @@ const earningData = [
   },
   {
     icon: <FaBriefcase />,
-    amount: initialVal?.fonction ?? 'Employé',
+    amount: initialVal?.fonction ?? ( UserR?.role != '' ? 'Employé' : (UserR?.fonction ?? 'Employé') ),
     percentage: '',
     title: '1',
     iconColor: 'rgb(255, 244, 229)',
@@ -238,14 +236,14 @@ function onEventRendered(args) {
       <div className="flex flex-wrap lg:flex-nowrap justify-center ">
         
             {/* <div className="flex w-10 flex-col bg-gray-50 dark:text-gray-200 dark:bg-secondary-dark-bg md:w-10 rounded-2xl "> */}
-              <NavLink
+              { UserR?.role != '' && <NavLink
                 to={"/listeEmployes"}
                 type="button"
                 style={{ color: 'rgb(255, 244, 229)', backgroundColor: currentColor ?? '#1A97F5' }}
                 className="flex items-center justify-center opacity-0.9 rounded-full h-4 p-4 hover:drop-shadow-xl"
               >
                 <FaArrowLeft size={20}/>
-              </NavLink>
+              </NavLink>}
             {/* </div> */}
 
         <div className="flex m-3 flex-wrap justify-center gap-1 items-center">
@@ -288,7 +286,7 @@ function onEventRendered(args) {
         <Inject services={[Month, ExcelExport, Agenda, Resize]} />
       </ScheduleComponent>
 
-      <PropertyPane>
+      { UserR?.role == "admin" && <PropertyPane>
         <table
           style={{ width: '100%', background: 'white' }}
         >
@@ -318,6 +316,7 @@ function onEventRendered(args) {
           </tbody>
         </table>
       </PropertyPane>
+      }
             
       <ToastContainer
       position="top-right"

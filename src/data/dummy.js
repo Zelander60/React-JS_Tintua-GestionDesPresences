@@ -578,6 +578,38 @@ export const links = [
       // },
     ],
   },
+  {
+    title: 'DEMANDES',
+    links: [
+      {
+        desc: "AUTOR. D'ABSENCES",
+        name: 'absences',
+        icon:  <RiContactsBookFill />,
+      },
+      // {
+      //   desc: 'LISTE SORTIES',
+      //   name: 'sorties',
+      //   icon: <RiContactsBookUploadFill />,
+      // },
+      // {
+      //   desc: 'CALENDRIER',
+      //   name: 'calendrier',
+      //   icon: <IoCalendarNumber />,
+      // },
+      // {
+      //   name: 'kanban',
+      //   icon: <BsKanban />,
+      // },
+      // {
+      //   name: 'editor',
+      //   icon: <FiEdit />,
+      // },
+      // {
+      //   name: 'color-picker',
+      //   icon: <BiColorFill />,
+      // },
+    ],
+  },
   // {
   //   title: 'Charts',
   //   links: [
@@ -617,6 +649,30 @@ export const links = [
   //   ],
   // },
 ];
+
+export const UsersLinks = [
+  
+  {
+    title: 'Archives',
+    links: [
+      {
+        desc: 'LISTE PRÉSENCES',
+        name: 'presences',
+        icon:  <RiContactsBookFill />,
+      },
+      {
+        desc: 'LISTE SORTIES',
+        name: 'sorties',
+        icon: <RiContactsBookUploadFill />,
+      },
+      {
+        desc: 'CALENDRIER',
+        name: 'calendrier',
+        icon: <IoCalendarNumber />,
+      },
+    ]
+  }
+]
 
 export const cartData = [
   {
@@ -3195,6 +3251,7 @@ export const contextMenuItems = [
 
 export const ExportMenu = [
   'ExcelExport',
+  'PdfExport',
 ];
 
 export const ecomPieChartData = [

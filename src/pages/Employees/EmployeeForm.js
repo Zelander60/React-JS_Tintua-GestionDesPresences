@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, } from '@material-ui/core';
+import { FormControl, FormLabel, Grid, } from '@material-ui/core';
 import Controls from "../../components/controls/Controls";
 import { useForm, Form } from '../../components/useForm';
 import * as employeeService from "../../services/employeeService";
@@ -10,7 +10,9 @@ import { useReactToPrint } from 'react-to-print';
 import { BsPrinterFill } from "react-icons/bs";
 import { useStateContext } from '../../contexts/ContextProvider';
 import { QrImg } from './QrImg';
-
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
 const genderItems = [
     { id: 'male', title: 'Male' },
@@ -26,7 +28,9 @@ const initialFValues = {
     email: 'vide',
     fonction: '',
     lieu: 'Fada',
-    // gender: 'male',
+    password: '',
+    projet: ['Aucun'],
+    n1: { ordre: 0, nom: "" },
     // departmentId: '',
     // hireDate: new Date(),
     // isPermanent: false,
@@ -39,6 +43,8 @@ export default function EmployeeForm(props) {
         let temp = { ...errors }
         if ('nom' in fieldValues)
             temp.nom = fieldValues.nom ? "" : "Ce champ est requis ."
+        if ('password' in fieldValues)
+            temp.password = fieldValues.password.length > 3 ? "" : "Minimum 4 lettres ."
         if ('lieu' in fieldValues)
             temp.lieu = fieldValues.lieu ? "" : "Ce champ est requis ."
         if ('email' in fieldValues)
@@ -47,6 +53,9 @@ export default function EmployeeForm(props) {
             temp.ordre = fieldValues.ordre.length < 5 && fieldValues.ordre.length !== 0 ? "" : "Ce champ est requis et 4 chiffres max !"
         if ('fonction' in fieldValues)
             temp.fonction = fieldValues.fonction.length != 0 ? "" : "Ce champ est requis ."
+        // if ('projet' in fieldValues)
+        //     let check = fieldValues.projet.find((val)=> val == 'Aucun')
+        //     temp.projet = fieldValues.projet.length != 0 ? "" : "Ce champ est requis ."
         setErrors({
             ...temp
         })
@@ -61,7 +70,8 @@ export default function EmployeeForm(props) {
         errors,
         setErrors,
         handleInputChange,
-        resetForm
+        resetForm,
+        handleAutoComplete
     } = useForm(type == 'add' ? initialFValues : dataEdit, true, validate);
 
     const { isLoading, error, refetchPost , Fragment} = usePost(refresh,type)
@@ -103,7 +113,7 @@ export default function EmployeeForm(props) {
      generateCode();
     }, [values])
     
-    const { currentColor } = useStateContext();
+    const { currentColor, AllDatas } = useStateContext();
 
     const componentRef = React.useRef();
 
@@ -111,10 +121,35 @@ export default function EmployeeForm(props) {
       content: () => componentRef.current,
     });
 
+    // const renderEmp = () => ([
+    //     { id: 'RRH', title: 'RRH' },
+    //     { id: 'Comptabilité', title: 'Comptabilité' },
+    //     { id: 'Coordo SAME', title: 'Coordo SAME' },
+    //     { id: 'Assistant RH', title: 'Assistant RH' },
+    //     { id: 'Assistant Comptabilité', title: 'Assistant Comptabilité' },
+    //     { id: 'Assistant Coordo SAME', title: 'Assistant Coordo SAME' },
+    //     { id: 'Assistant CC&SE', title: 'Assistant CC&SE' },
+    //     { id: 'Stagiaire RH', title: 'Stagiaire RH' },
+    //     { id: 'Stagiaire Comptabilité', title: 'Stagiaire Comptabilité' },
+    //     { id: 'Employé', title: 'Employé' },
+    // ])
+
+    const optionsEmp = AllDatas.employers.map((option) => {
+        const firstLetter = option?.nom[0].toUpperCase();
+        // console.warn(option.title)
+        return {
+          firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+          ...option,
+        };
+      });
+    // const optionsEmp = AllDatas.employers.map((option) => option.name);
+
+    const options = ['Aucun', 'SignPost', 'Surare-Sanu'];
+
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container className=' inline-grid grid-cols-2'>
-                { type == 'delete' ? '' : <Grid className='inline-grid grid-cols-1' >
+            <Grid container className='grid grid-cols-3'>
+                { type == 'delete' ? '' : <Grid className=' inline-grid' >
                     <Controls.Input
                         label="Ordre"
                         name="ordre"
@@ -132,6 +167,14 @@ export default function EmployeeForm(props) {
                     />
 
                     <Controls.Input
+                        name="password"
+                        label="Mot de Passe"
+                        value={values.password}
+                        onChange={handleInputChange}
+                        error={errors.password}
+                    />
+
+                    <Controls.Input
                         label="Ville"
                         name="lieu"
                         value={values.lieu}
@@ -140,7 +183,37 @@ export default function EmployeeForm(props) {
                     />
 
                 </Grid> }
-                <Grid  className='flex flex-col justify-between'>
+
+                <Grid className='inline-grid'>
+                    { type == 'delete' ? '' : 
+                    <>
+                        <Controls.Input
+                        label="Email"
+                        name="email"
+                        value={values.email}
+                        onChange={handleInputChange}
+                        error={errors.email}
+                        />
+
+                        <Autocomplete
+                        //   id="grouped-demo"
+                          value={values.n1}
+                          onChange={(event, newValue) => {
+                            handleAutoComplete('n1', newValue);
+                            console.log(values)
+                          }}
+                          options={optionsEmp.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                        //   options={optionsEmp}
+                          groupBy={(opt) => opt.firstLetter}
+                          getOptionLabel={(opt) => opt.nom}
+                        //   sx={{ width: 300 }}
+                          renderInput={(params) => <TextField {...params} label="N+1" />}
+                        />
+                    </>
+                    }
+                </Grid>
+                
+                <Grid className='inline-grid'>
                     {/* <Controls.RadioGroup
                         name="gender"
                         label="Gender"
@@ -165,6 +238,31 @@ export default function EmployeeForm(props) {
                         onChange={handleInputChange}
                         error={errors.email}
                         />
+
+                    <Autocomplete
+                      multiple
+                      id="checkboxes-tags-demo"
+                      value={values.projet ?? ['Aucun']}
+                      options={options}
+                      onChange={(e, value)=> handleAutoComplete('projet', value)}
+                    //   disableCloseOnSelect
+                      getOptionLabel={(option) => option}
+                      renderOption={(props, option, { selected }) => (
+                        <li {...props}>
+                          <Checkbox
+                            // icon={check}
+                            // checkedIcon={checkedIcon}
+                            style={{ marginRight: 8 }}
+                            checked={selected}
+                          />
+                          {option}
+                        </li>
+                      )}
+                    //   style={{ width: 500 }}
+                      renderInput={(params) => (
+                        <TextField {...params} label="Services/Projets" placeholder="Projets" />
+                      )}
+                    />
                     </>
                     }
 
