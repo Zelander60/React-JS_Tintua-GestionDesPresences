@@ -26,12 +26,12 @@ const initialFValues = {
     ordre: (parseInt(localStorage.getItem('Tordre')) + 1).toString(),
     nom: '',
     email: 'vide',
-    fonction: '',
+    fonction: 'Employé',
     lieu: 'Fada',
     password: '',
     projet: ['Aucun'],
     n1: { ordre: 0, nom: "" },
-    // departmentId: '',
+    departement: 'Pas de département',
     // hireDate: new Date(),
     // isPermanent: false,
 }
@@ -121,18 +121,24 @@ export default function EmployeeForm(props) {
       content: () => componentRef.current,
     });
 
-    // const renderEmp = () => ([
-    //     { id: 'RRH', title: 'RRH' },
-    //     { id: 'Comptabilité', title: 'Comptabilité' },
-    //     { id: 'Coordo SAME', title: 'Coordo SAME' },
-    //     { id: 'Assistant RH', title: 'Assistant RH' },
-    //     { id: 'Assistant Comptabilité', title: 'Assistant Comptabilité' },
-    //     { id: 'Assistant Coordo SAME', title: 'Assistant Coordo SAME' },
-    //     { id: 'Assistant CC&SE', title: 'Assistant CC&SE' },
-    //     { id: 'Stagiaire RH', title: 'Stagiaire RH' },
-    //     { id: 'Stagiaire Comptabilité', title: 'Stagiaire Comptabilité' },
-    //     { id: 'Employé', title: 'Employé' },
-    // ])
+     // { id: 'RRH', title: 'RRH' },
+    const renderSelectList = (listName) => {
+        const Liste = AllDatas[listName].map((val)=>(
+            { id: val?.nom, title: val?.nom }
+        ));
+        // console.warn(Liste);
+        // console.warn(AllDatas[listName]);
+        return Liste;
+    }
+
+    const renderAutoList = (listName) => {
+        const Liste = AllDatas[listName].map((val)=>(
+            val?.nom_projet
+        ));
+        // console.warn(Liste);
+        // console.warn(AllDatas[listName]);
+        return Liste;
+    }
 
     const optionsEmp = AllDatas.employers.map((option) => {
         const firstLetter = option?.nom[0].toUpperCase();
@@ -148,8 +154,8 @@ export default function EmployeeForm(props) {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Grid container className='grid grid-cols-3'>
-                { type == 'delete' ? '' : <Grid className=' inline-grid' >
+            <Grid container className='grid grid-cols-2'>
+                { type == 'delete' ? '' : <Grid className='inline-grid' >
                     <Controls.Input
                         label="Ordre"
                         name="ordre"
@@ -175,16 +181,33 @@ export default function EmployeeForm(props) {
                     />
 
                     <Controls.Input
+                    label="Email"
+                    name="email"
+                    value={values.email}
+                    onChange={handleInputChange}
+                    error={errors.email}
+                    />
+
+                    <Controls.Select
+                        name="lieu"
+                        label="Ville"
+                        value={values.lieu}
+                        onChange={handleInputChange}
+                        options={renderSelectList('lieu')}
+                        error={errors.lieu}
+                    />
+
+                    {/* <Controls.Input
                         label="Ville"
                         name="lieu"
                         value={values.lieu}
                         onChange={handleInputChange}
                         error={errors.lieu}
-                    />
+                    /> */}
 
                 </Grid> }
 
-                <Grid className='inline-grid'>
+                {/* <Grid className='inline-grid'>
                     { type == 'delete' ? '' : 
                     <>
                         <Controls.Input
@@ -211,7 +234,7 @@ export default function EmployeeForm(props) {
                         />
                     </>
                     }
-                </Grid>
+                </Grid> */}
                 
                 <Grid className='inline-grid'>
                     {/* <Controls.RadioGroup
@@ -223,27 +246,46 @@ export default function EmployeeForm(props) {
                     /> */}
                     { type == 'delete' ? '' : 
                     <>
+
+                        <Controls.Select
+                            name="departement"
+                            label="Département"
+                            value={values.departement}
+                            onChange={handleInputChange}
+                            options={renderSelectList('departement')}
+                            // error={errors.departement}
+                        />
+                        
                         <Controls.Select
                             name="fonction"
                             label="Fonction"
                             value={values.fonction}
                             onChange={handleInputChange}
-                            options={employeeService.getDepartmentCollection()}
+                            options={renderSelectList('fonction')}
                             error={errors.fonction}
                         />
-                        <Controls.Input
-                        label="Email"
-                        name="email"
-                        value={values.email}
-                        onChange={handleInputChange}
-                        error={errors.email}
+
+                        <Autocomplete
+                        //   id="grouped-demo"
+                          value={values.n1}
+                          isOptionEqualToValue={(option, value) => (option.ordre == value.ordre) || (value.ordre == 0)}
+                          onChange={(event, newValue) => {
+                            handleAutoComplete('n1', newValue);
+                            // console.log(values)
+                          }}
+                          options={optionsEmp.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                        //   options={optionsEmp}
+                          groupBy={(opt) => opt.firstLetter}
+                          getOptionLabel={(opt) => opt.nom}
+                        //   sx={{ width: 300 }}
+                          renderInput={(params) => <TextField {...params} label="N+1" />}
                         />
 
                     <Autocomplete
                       multiple
                       id="checkboxes-tags-demo"
                       value={values.projet ?? ['Aucun']}
-                      options={options}
+                      options={renderAutoList('service')}
                       onChange={(e, value)=> handleAutoComplete('projet', value)}
                     //   disableCloseOnSelect
                       getOptionLabel={(option) => option}

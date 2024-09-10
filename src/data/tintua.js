@@ -93,7 +93,7 @@ const EmployeeGridStatus = (props) => (
       onClick={()=>{
         setPoperPop( true, initial, props.id );
         setType('edit');
-        console.warn(props.projet)
+        // console.warn(props.projet)
       }}
       type="button"
       style={{ background: CurrColor() }}

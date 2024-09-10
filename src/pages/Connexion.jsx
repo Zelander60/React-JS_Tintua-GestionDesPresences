@@ -14,7 +14,7 @@ const Connexion = () => {
 
   const goTo = useNavigate();
   
-  const {currentColor, setOnline, API, setUserR } = useStateContext()
+  const {currentColor, setOnline, API, setUserR, handleAllDatas } = useStateContext()
 
   const Connecter = async () => {
       const id = toast.loading('En cours ...',{isLoading: true})
@@ -64,6 +64,14 @@ const Connexion = () => {
                     toast.success(`${responseJson?.message}`);
                     console.log(`${responseJson?.user[0]?.user} i${user}`)
                     setUserR(responseJson?.user[0] ?? null);
+                    const params = responseJson?.params;
+                    handleAllDatas('hard',{
+                      fonction: params?.fonction ?? [],
+                      lieu: params?.lieu ?? [],
+                      motif: params?.motif ?? [],
+                      service: params?.service ?? [],
+                      departement: params?.departement ?? [],
+                    });
                   }
                 })
                 .catch(errors => {

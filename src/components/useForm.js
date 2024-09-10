@@ -30,7 +30,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
                 ...values,
                 [nom]: value != null && value != '' && value.nom != null ? value : {nom: '', ordre: 0}
             })
-            console.warn(value)
+            // console.warn(value)
         }
         
         // if (validateOnChange)

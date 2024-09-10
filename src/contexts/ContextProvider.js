@@ -12,9 +12,10 @@ const initialState = {
 const entiers = {
   employers: null,
   fonction: null,
-  ville: null,
-  absence: null,
+  lieu: null,
+  motif: null,
   service: null,
+  departement: null,
 };
 
 export const ContextProvider = ({ children }) => {
@@ -80,12 +81,16 @@ const setApiper = (Apivalue) => {
       [clicked]: true,
     });
 
-  const handleAllDatas = (name,values) =>
-    setAllDatas({
-      ...AllDatas,
-      [name]: values,
+  const handleAllDatas = (name,values) =>{
+    if(name != 'hard'){
+      setAllDatas({
+        ...AllDatas,
+        [name]: values,
+      });
+    }else if (name == 'hard') {
+      setAllDatas(values);
     }
-  );
+  };
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values

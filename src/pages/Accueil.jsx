@@ -22,7 +22,7 @@ const DropDown = ({ currentMode }) => (
 const PropertyPane = (props) => <div className="mt-5">{props.children}</div>;
 
 const Accueil = () => {
-  const { currentColor, API } = useStateContext();
+  const { currentColor, API, AllDatas } = useStateContext();
   loadCldr(
     require('cldr-data/supplemental/numberingSystems.json'),
     require('cldr-data/main/fr-CH/ca-gregorian.json'),
@@ -101,6 +101,7 @@ const Accueil = () => {
     const year = today.getFullYear();
     const date = today.getDate();
     console.log(currentColor)
+    console.log(AllDatas)
     return `${date}/${month}/${year}`;
   }
 
