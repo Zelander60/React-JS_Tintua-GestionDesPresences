@@ -28,7 +28,7 @@ export default function ActionButton(props) {
 
     return (
         <Button
-            className={`${classes.root} ${classes[color]}`}
+            className={`${classes.root} ${classes[color]} max-h-8`}
             onClick={onClick}>
             {children}
         </Button>

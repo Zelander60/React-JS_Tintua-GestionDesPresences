@@ -30,7 +30,7 @@ const useFetch = (endpoint, method, query) => {
               'Content-Type': 'application/json',
             },
 
-            body: JSON.stringify(query),
+            body: query == undefined || query == null ? null : JSON.stringify(query),
           })
           .then(response => {
             if (!response.ok) {
@@ -49,17 +49,18 @@ const useFetch = (endpoint, method, query) => {
                 
               } else{
                 // setIsLoading(false);
-                setData(responseJson);
                 const empDatas = responseJson?.employers.map((val)=>({
                   ordre: val.ordre,
                   nom: val.nom
                 }));
-                console.log(empDatas[1].title);
+                // console.log(empDatas[1]?.title);
                 endpoint !== 'employers' ? toast.success(`${responseJson?.message}`)
                                          : handleAllDatas('employers', empDatas);
                 // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
                 setOK(true);
-                console.log(responseJson)
+                // setData(responseJson);
+                setData(responseJson);
+                // console.warn(data)
               }
             })
             .catch(errors => {

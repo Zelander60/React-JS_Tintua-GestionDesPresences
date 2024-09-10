@@ -60,7 +60,7 @@ const ConnexionEmp = () => {
                     
                   } else{
                     setOnline(true);
-                    goTo("/presences");
+                    goTo("/collegues");
                     toast.success(`${responseJson?.message}`);
                     console.log(`${responseJson?.user[0]?.n1} i ${responseJson?.user[0]}`)
                     setUserR(responseJson?.user[0] ?? null);

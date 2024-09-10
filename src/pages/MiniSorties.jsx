@@ -11,6 +11,7 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
     const [No, setNo] = useState(actions?.sNo ?? 0);
     const [IID, setIID] = useState(actions?.sID ?? 0);
     const [sType, setsType] = useState(actions?.sType ?? '');
+    const [Pro, setPro] = useState(actions?.sPro ?? '');
 
     useEffect(() => {
         setHA(actions?.HeureA ?? '');
@@ -19,6 +20,7 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
         setNo(actions?.sNo ?? 'new');
         setIID(actions?.sID ?? '0');
         setsType(actions?.sType ?? '');
+        setPro(actions?.sPro ?? '');
     }, [actions])
 
     const fetchPresence = async () => {
@@ -39,6 +41,7 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
                     'rang': No,
                     'HeureA': HA,
                     'HeureD': HD,
+                    'Type': Pro,
                     'Observations': Obs,
                 }),
               })
@@ -121,8 +124,8 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
       </div>
 
       </div>
-
-      <div className='flex flex-row gap-8 mt-4'>
+      
+      <div className='flex flex-row gap-2 mt-4'>
 
       <div>
         <div className="flex items-center justify-between">
@@ -144,6 +147,34 @@ function MiniSorties({refresh, date, color, actions, API, opS, setOps}) {
           />
         </div>
       </div>
+
+      <div>
+        <div className="flex items-center justify-between">
+          <label htmlFor="obs" className="block text-sm font-medium leading-6 text-gray-900">
+            Type
+          </label>
+        </div>
+        <div className="mt-2">
+          <select
+            id="type"
+            name="type"
+            // type="text"
+            autoComplete="name"
+            //required
+            value={Pro}
+            // placeholder='Type'
+            onChange={(e)=>setPro(e.target.value)}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          >
+            <option value={'Non Professionnel'}>Non Professionnel</option>
+            <option value={'Professionnel'}>Professionnel</option>
+          </select>
+        </div>
+      </div>
+      
+      </div>
+
+      <div className='flex flex-row gap-2 mt-4'>
 
       {/* <div>
         <div className="flex items-center justify-between">

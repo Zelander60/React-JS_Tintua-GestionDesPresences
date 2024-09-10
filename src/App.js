@@ -16,6 +16,8 @@ import Connexion from './pages/Connexion';
 import Offline from './pages/Offline';
 import Absences from './pages/Absences';
 import ConnexionEmp from './pages/ConnexionEmp';
+import Variables from './pages/Variables';
+import Collegue from './pages/Collegues';
 
 const App = () => {
 
@@ -75,16 +77,19 @@ const App = () => {
               <Routes>
                 {/* dashboard  */}
                 <Route path="/tintua" element={(<Connexion />)} />
-                <Route path="/*" element={(<ConnexionEmp />)} />
+                <Route path="/" element={(<ConnexionEmp />)} />
                 <Route path="/user" element={(<ConnexionEmp/>)} />
                 <Route path="/acceuil" element={(online ? <Accueil /> : <Offline />)} />
 
                 {/* pages  */}
                 {/* <Route path="/orders" element={<Orders />} /> */}
+                <Route path="/collegues" element={online ? <Collegue /> : <Offline />} />
                 <Route path="/presences" element={online ? <Employees /> : <Offline />} />
                 <Route path="/listeEmployes" element={online ? <EmployersTotal /> : <Offline />} />
                 <Route path="/sorties" element={online ? <Sorties /> : <Offline />} />
+                <Route path="/calendrier" element={online ? <Calendar /> : <Offline />} />
                 <Route path="/absences" element={online ? <Absences /> : <Offline />} />
+                <Route path="/variables" element={online ? <Variables /> : <Offline />} />
 
                 {/* <Route path="/customers" element={<Customers />} /> */}
 
@@ -92,7 +97,6 @@ const App = () => {
                 {/* <Route path="/kanban" element={<Kanban />} /> */}
                 {/* <Route path="/test" element={<EmployeesT />} /> */}
                 {/* <Route path="/editor" element={<Editor />} /> */}
-                <Route path="/calendrier" element={online ? <Calendar /> : <Offline />} />
                 {/* <Route path="/color-picker" element={<ColorPicker />} /> */}
 
                 {/* charts  */}

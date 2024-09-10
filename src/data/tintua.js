@@ -10,6 +10,8 @@ import { FaEye } from "react-icons/fa6";
 import { NavLink, useNavigate } from "react-router-dom";
 import { BsFillHouseAddFill } from "react-icons/bs";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import { MdFolderDelete } from "react-icons/md";
+import { BiSolidMessageSquareEdit } from "react-icons/bi";
 
 
 const CurrColor = () => {
@@ -31,17 +33,30 @@ function randomNumberInRange(min, max) {
   return colorH[rNum];
 }
 
-const gridEmployeeProfile = (props) => (
-  <div className="flex flex-row gap-2">
-    <div className={`w-6 h-6 rounded-full ${randomNumberInRange(0,colorH.length - 1)} flex items-center justify-center`}>
-      <p className="py-1 px-2">{props?.nom[0] ?? 'C'}</p>
-    </div>
+const gridEmployeeProfile = (props) => {
+  
+  const { API } = useStateContext();
+  let hasNoImg = props?.image == "public/uploads/profiles/default.png";
 
-    <div className="flex flex-row items-center gap-2">
-      <p className="truncate">{props?.nom ?? 'chargement...'}</p>
+    return (
+    <div className="flex flex-row gap-2">
+      <div className={`w-6 h-6 rounded-full ${hasNoImg ? randomNumberInRange(0,4) : ''} flex items-center justify-center`}>
+        { hasNoImg ? <p className="py-1 px-2">{props?.nom[0] ?? 'C'}</p>
+          :
+          <img
+            className="rounded-full"
+            src={`${API.Local_Host_Name}/../storage/app/${props?.image ?? "public/uploads/profiles/default.png"}`}
+            alt=""
+          />
+        }
+      </div>
+
+      <div className="flex flex-row items-center gap-2">
+        <p className="truncate">{props?.nom ?? 'chargement...'}</p>
+      </div>
     </div>
-  </div>
-);
+  )
+}
 
 const gridEmployeeCountry = (props) => (
   <div className="flex items-center justify-center gap-2">
@@ -71,7 +86,7 @@ const EmployeeGridStatus = (props) => (
   );
 
 
-  const buttonDelete = (props) => {
+  const buttonDelete = (props, mode) => {
     const { UserR, setPoperPop, setType, setIsNewSortie } = useStateContext();
     const initial = {
       ordre: `${props.ordre}`,
@@ -79,8 +94,12 @@ const EmployeeGridStatus = (props) => (
       email: `${props.email}`,
       password: `${props.password}`,
       fonction: `${props.fonction}`,
+      departement: `${props.departement}`,
       n1: props.n1,
       projet: props.projet,
+      contrat_deb: props.contrat_deb,
+      contrat_fin: props.contrat_fin,
+      image: props.image,
       lieu: `${props.lieu}`,
     }
     const goTo = useNavigate();
@@ -105,7 +124,7 @@ const EmployeeGridStatus = (props) => (
     </TooltipComponent>
 
 
-    {UserR?.role == "admin" && <TooltipComponent content={`Nouvelle Sortie de ${initial.nom}`}>
+    {UserR?.role == "admin" && mode != "rappel" && <TooltipComponent content={`Nouvelle Sortie de ${initial.nom}`}>
     <button
       // key={3}
       onClick={()=>{
@@ -162,6 +181,7 @@ const EmployeeGridStatus = (props) => (
     const sorties = {
       sID: `${props.id}`,
       sNo: `${props.rang}`,
+      sPro: `${props.Type}`,
       Nom: `${props.nom}`,
       HeureA: `${props.HeureA}`,
       HeureD: `${props.HeureD}`,
@@ -179,7 +199,7 @@ const EmployeeGridStatus = (props) => (
       onClick={()=>{
         setActions(sorties);
         // setPoperPop( true, initial, props.id );
-        console.warn(props)
+        // console.warn(Admin())
         // setType('edit');
       }}
       type="button"
@@ -205,12 +225,74 @@ const EmployeeGridStatus = (props) => (
     </div>)
   }
 
+  const paramsActions = (props) => {
+    const { setParams, setParamsOpen } = useStateContext();
+  
+    const params= (m) => [{
+      nom: `${props?.nom}`,
+      id: `${props?.id}`,
+      source: `${props?.source}`,
+      desc: `${props?.desc}`,
+      mode: m,
+    }]
+   return (
+   <div className="flex items-center justify-center py-2 gap-3">
+    <button
+      onClick={()=>{
+        setParams(params('edit'));
+        console.log(params('edit'));
+        setParamsOpen(true);
+      }}
+      type="button"
+      style={{ background: CurrColor() }}
+      className="text-white p-1.5 rounded-lg ease-in-out delay-15 hover:scale-110"
+    >
+      <BiSolidMessageSquareEdit size={20} />
+    </button>
+
+    <button
+      onClick={()=>{
+        setParams(params('suppr'));
+        console.log(params('suppr'))
+        setParamsOpen(true);
+      }}
+      type="button"
+      style={{ background: '#FB9678' }}
+      className="text-white p-1.5 rounded-lg transition ease-in-out delay-15 hover:scale-110"
+    >
+      <MdFolderDelete size={20} />
+
+    </button>
+    
+    </div>)
+  }
+
   const gridNumProfile = (props) => (
     <div className="flex items-center justify-center py-2">
       <div className={`self-center w-6 h-6 rounded-md bg-sky-900 flex items-center justify-center`}>
         <p className="py-1 px-2 text-white">{props.rang ?? '0'}</p>
       </div>
     </div>
+  );
+
+  const joursRestants = (props) => (
+    <button
+    type="button"
+    style={{ background: props?.jours >= 0 ? "rgb(254, 201, 15)" : "#FB9678"}}
+    className="text-white py-1 px-2 capitalize rounded-2xl text-md"
+  >
+    {`${props?.jours} jours`}
+  </button>
+  );
+
+  const profession = (props) => (
+    <button
+    type="button"
+    style={{ background: props?.Type == 'Professionnel' ? "#1A237E" : "#FB9678"}}
+    className="text-white py-1 px-2 capitalize rounded-2xl text-md"
+  >
+    {props?.Type ?? 'Non Défini'}
+  </button>
   );
  
 export const TintuaEmployeesData = [
@@ -281,6 +363,58 @@ export const TintuaEmployeesGrid = [
     headerText: "Actions",
     template: buttonDelete,
     width: "200",
+    textAlign: "Center",
+  },
+];
+
+export const TintuaRappelsGrid = [
+  {
+    field: "id",
+    headerText: "id",
+    width: "0",
+    textAlign: "Center",
+  },
+  {
+    field: "ordre",
+    headerText: "Ordre",
+    width: "0",
+    textAlign: "Center",
+  },
+
+  {
+    field: "nom",
+    headerText: "Nom et Prénoms de l'agent",
+    template: gridEmployeeProfile,
+    width: "150",
+    textAlign: "Justify",
+  },
+
+  {
+    field: "fonction",
+    headerText: "Fonction",
+    width: "100",
+    textAlign: "Center",
+  },
+  {
+    field: "lieu",
+    headerText: "Lieu",
+    width: "100",
+    textAlign: "Center",
+    template: gridEmployeeCountry,
+  },
+  {
+    field: "jours",
+    headerText: "Restants",
+    width: "100",
+    textAlign: "Center",
+    template: joursRestants,
+  },
+
+  {
+    field: "Observations",
+    headerText: "Actions",
+    template: (e)=>buttonDelete(e, "rappel"),
+    width: "150",
     textAlign: "Center",
   },
 ];
@@ -386,6 +520,14 @@ export const TintuaSortiesGrid = [
   },
 
   {
+    field: "Type",
+    headerText: "Type",
+    template: profession,
+    width: "120",
+    textAlign: "Center",
+  },
+
+  {
     field: "fonction",
     headerText: "Actions",
     template: actions,
@@ -395,11 +537,37 @@ export const TintuaSortiesGrid = [
 
 ];
 
+export const ParamsGrid = (nom) => [
+  {
+    field: "id",
+    headerText: "Id",
+    width: "0",
+    textAlign: "Center",
+  },
+
+  {
+    field: "nom",
+    headerText: nom ?? "Nom",
+    // template: gridEmployeeProfile,
+    width: "100",
+    textAlign: "Justify",
+  },
+
+  {
+    field: "id",
+    headerText: "Action",
+    // template: (e) => paramsActions(e),
+    template: paramsActions,
+    width: "50",
+    textAlign: "Justify",
+  },
+];
+
 
 const Poper = ({reffresher}) => {
 
   const [recordForEdit, setRecordForEdit] = useState(null);
-  const { poper, setPoper, propsID, initialVal, type } = useStateContext();
+  const { poper, setPoper, propsID, initialVal, type, API } = useStateContext();
 
   const addOrEdit = (employee, resetForm) => {
     if (employee.id == 0)
@@ -412,9 +580,9 @@ const Poper = ({reffresher}) => {
 
   return (
     <Popup
-    title={type == 'edit' ? `Modifier "${initialVal?.nom ?? ''}" ?` : `Supprimer "${initialVal?.nom ?? ''}" ?`}
-    openPopup={poper}
-    setOpenPopup={setPoper}
+      title={type == 'edit' ? `Modifier "${initialVal?.nom ?? ''}" ?` : `Supprimer "${initialVal?.nom ?? ''}" ?`}
+      openPopup={poper}
+      setOpenPopup={setPoper}
     >
       <EmployeeForm
         recordForEdit={recordForEdit}

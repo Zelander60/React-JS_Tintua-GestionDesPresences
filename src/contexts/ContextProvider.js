@@ -11,11 +11,16 @@ const initialState = {
 
 const entiers = {
   employers: null,
-  fonction: null,
-  lieu: null,
-  motif: null,
-  service: null,
-  departement: null,
+  fonction: [],
+  lieu: [],
+  motif: [],
+  service: [],
+  departement: [],
+};
+
+const params = {
+  id: null,
+  nom: null,
 };
 
 export const ContextProvider = ({ children }) => {
@@ -33,11 +38,14 @@ export const ContextProvider = ({ children }) => {
   const [Actions, setActions] = useState(null);
   const [API, setAPI] = useState({
     Local_Host_Name : "http://192.168.0.222/api_presences/public",
+    // Local_Host_Name : "https://tintua.000webhostapp.com/indexB.php",
 });
 const [UserR, setUserR] = useState(null);
 const [isNewSortie, setIsNewSortie] = useState(false);
 const [OpenSS, setOpenSS] = useState(false);
 const [AllDatas, setAllDatas] = useState(entiers);
+const [Params, setParams] = useState(params);
+const [ParamsOpen, setParamsOpen] = useState(false);
 
 
 const appi = localStorage.getItem("api");
@@ -96,6 +104,10 @@ const setApiper = (Apivalue) => {
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <StateContext.Provider
       value={{
+        setParamsOpen,
+        ParamsOpen,
+        setParams,
+        Params,
         handleAllDatas,
         AllDatas,
         setOpenSS,

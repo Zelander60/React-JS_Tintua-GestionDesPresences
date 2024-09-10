@@ -9,6 +9,8 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
 
     const handleInputChange = e => {
         const { name, value } = e.target
+        console.log(value)
+        console.log(name)
         setValues({
             ...values,
             [name]: value
@@ -31,6 +33,17 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
                 [nom]: value != null && value != '' && value.nom != null ? value : {nom: '', ordre: 0}
             })
             // console.warn(value)
+        }else if (nom == 'emailRecept') {
+            setValues({
+                ...values,
+                [nom]: value == true ? 'oui' : 'non'
+            })
+            // console.warn(value)
+        }else{
+            setValues({
+                ...values,
+                [nom]: value
+            });
         }
         
         // if (validateOnChange)

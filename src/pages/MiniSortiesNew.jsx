@@ -9,6 +9,7 @@ function MiniSortiesNew({initial, color, active, API, iid}) {
     const [HA, setHA] = useState('');
     const [HD, setHD] = useState('');
     const [Obs, setObs] = useState('');
+    const [Pro, setPro] = useState('');
     const [No, setNo] = useState('new');
     const [dateT, setDateT] = useState('auto');
 
@@ -51,6 +52,7 @@ function MiniSortiesNew({initial, color, active, API, iid}) {
                     'rang': No,
                     'HeureA': HA,
                     'HeureD': HD,
+                    'Type' : Pro,
                     'Observations': Obs,
                 }),
               })
@@ -166,6 +168,34 @@ function MiniSortiesNew({initial, color, active, API, iid}) {
           />
         </div>
       </div>
+
+      <div>
+        <div className="flex items-center justify-between">
+          <label htmlFor="obs" className="block text-sm font-medium leading-6 text-gray-900">
+            Type
+          </label>
+        </div>
+        <div className="mt-2">
+          <select
+            id="type"
+            name="type"
+            // type="text"
+            autoComplete="name"
+            //required
+            value={Pro}
+            // placeholder='Type'
+            onChange={(e)=>setPro(e.target.value)}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          >
+            <option value={'Non Professionnel'}>Non Professionnel</option>
+            <option value={'Professionnel'}>Professionnel</option>
+          </select>
+        </div>
+      </div>
+
+      </div>
+
+      <div className='flex self-end gap-8 mt-4'>
 
       <div className='self-end'>
         <button

@@ -35,61 +35,62 @@ const Employees = () => {
   // const [ok, setOK] = useState(false);
   // const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchPresence = async () => {
-      const id = toast.loading('En cours ...',{isLoading: true})
-            // setIsLoading(true);
-            // console.info(query)
-        await fetch(`${API.Local_Host_Name}/api/presences/jour/${dateTime}`, {
-                method: 'POST',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                },
-    
-                body: UserR?.role != '' ? null :
-                JSON.stringify({
-                  UserType: "user",
-                  UserOrdre: UserR?.ordre,
-                }),
-              })
-              .then(response => {
-                if (!response.ok) {
-                  // handle network errors or non-2xx status codes
-                  toast.error('Vérifiez votre connexion !');
-                }
-                return response.json();
-              })
-                .then((responseJson) => {
-                  //Showing response message coming from server
-                  if (responseJson?.status !== 200) {
-                    toast.warn(`${responseJson?.message}`);
-                    // setIsLoading(false);
-                    console.warn(`${responseJson}`);
-                    setData(responseJson);
-                    // console.log(new Date())
-                    
-                  } else{
-                    // setIsLoading(false);
-                    setData(responseJson);
-                    toast.success(`${responseJson?.message}`);
-                    // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
-                    // setOK(true);
-                    console.log(responseJson)
-                  }
-                })
-                .catch(errors => {
-                  //display error message         
-                  toast.error("Une erreure est survenue !");
-                  console.warn(errors);
-                  // setError(errors);
-                })
-                .finally(()=>{
-                  toast.dismiss(id);
+  const fetchPresence = async () => {
+    const id = toast.loading('En cours ...',{isLoading: true})
+          // setIsLoading(true);
+          // console.info(query)
+      await fetch(`${API.Local_Host_Name}/api/presences/jour/${dateTime}`, {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+  
+              body: UserR?.role != '' ? null :
+              JSON.stringify({
+                UserType: "user",
+                UserOrdre: UserR?.ordre,
+              }),
+            })
+            .then(response => {
+              if (!response.ok) {
+                // handle network errors or non-2xx status codes
+                toast.error('Vérifiez votre connexion !');
+              }
+              return response.json();
+            })
+              .then((responseJson) => {
+                //Showing response message coming from server
+                if (responseJson?.status !== 200) {
+                  toast.warn(`${responseJson?.message}`);
                   // setIsLoading(false);
-                });
-    }
-    fetchPresence();
+                  console.warn(`${responseJson}`);
+                  setData(responseJson);
+                  // console.log(new Date())
+                  
+                } else{
+                  // setIsLoading(false);
+                  setData(responseJson);
+                  toast.success(`${responseJson?.message}`);
+                  // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
+                  // setOK(true);
+                  console.log(responseJson)
+                }
+              })
+              .catch(errors => {
+                //display error message         
+                toast.error("Une erreure est survenue !");
+                console.warn(errors);
+                // setError(errors);
+              })
+              .finally(()=>{
+                toast.dismiss(id);
+                // setIsLoading(false);
+              });
+  }
+  
+  useEffect(() => {
+    if(UserR != null) fetchPresence();
   }, [dateTime])
 
   const change = (args) => {
@@ -149,17 +150,18 @@ const Employees = () => {
 
       </GridComponent>
       <ToastContainer
-      position="top-right"
-      className={"conZ"}
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="colored" />
+        position="top-right"
+        className={"conZ"}
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 };

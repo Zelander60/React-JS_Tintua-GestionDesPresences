@@ -13,31 +13,35 @@ import { QrImg } from './QrImg';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-
-const genderItems = [
-    { id: 'male', title: 'Male' },
-    { id: 'female', title: 'Female' },
-    { id: 'other', title: 'Other' },
-]
+import { loadCldr} from '@syncfusion/ej2-base';
+import { DatePickerComponent } from '@syncfusion/ej2-react-calendars';
 
 
 const initialFValues = {
     // id: 0,
     ordre: (parseInt(localStorage.getItem('Tordre')) + 1).toString(),
     nom: '',
-    email: 'vide',
+    email: 'vide@gmail.com',
     fonction: 'Employé',
     lieu: 'Fada',
     password: '',
     projet: ['Aucun'],
     n1: { ordre: 0, nom: "" },
     departement: 'Pas de département',
+    contrat_deb: "",
+    contrat_fin: "",
     // hireDate: new Date(),
-    // isPermanent: false,
 }
 
 export default function EmployeeForm(props) {
     const { addOrEdit, recordForEdit, refresh, type, dataEdit, id, close } = props
+
+    loadCldr(
+        require('cldr-data/supplemental/numberingSystems.json'),
+        require('cldr-data/main/fr-CH/ca-gregorian.json'),
+        require('cldr-data/main/fr-CH/numbers.json'),
+        require('cldr-data/main/fr-CH/timeZoneNames.json')
+    );
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -86,13 +90,28 @@ export default function EmployeeForm(props) {
             type == 'edit' ? refetchPost(`employers/update/${id}`,'POST',values) :
                             refetchPost(`employers/delete/${id}`,'GET');
             close(false);
-        }else{
-            type == 'delete' ? refetchPost(`employers/delete/${id}`,'GET') : '';
+        }else if(type == 'delete'){
+            refetchPost(`employers/delete/${id}`,'GET');
             close(false);
         }
     }
 
     const [urlImg, setUrlImg] = useState('');
+
+    // const [urlImg, setUrlImg] = useState('');
+
+    const change = (args, dName) => {
+        /* eslint-disable no-console */
+        // let fresh2 = "";
+        let fresh = (args.value).toLocaleDateString();
+        // fresh2 = (args.value).toString();
+        // let take = fresh2.split(" ");
+        let date = fresh.replace(/\//gi, '-');
+        // let ba = `${take[1]}${take[3]}`
+        // let base = ba.toLowerCase();
+        console.log(date);
+        handleAutoComplete(dName, date);
+    };
 
     useEffect(() => {
         if (recordForEdit != null)
@@ -113,7 +132,7 @@ export default function EmployeeForm(props) {
      generateCode();
     }, [values])
     
-    const { currentColor, AllDatas } = useStateContext();
+    const { currentColor, AllDatas, API } = useStateContext();
 
     const componentRef = React.useRef();
 
@@ -133,7 +152,7 @@ export default function EmployeeForm(props) {
 
     const renderAutoList = (listName) => {
         const Liste = AllDatas[listName].map((val)=>(
-            val?.nom_projet
+            val?.nom
         ));
         // console.warn(Liste);
         // console.warn(AllDatas[listName]);
@@ -149,8 +168,6 @@ export default function EmployeeForm(props) {
         };
       });
     // const optionsEmp = AllDatas.employers.map((option) => option.name);
-
-    const options = ['Aucun', 'SignPost', 'Surare-Sanu'];
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -197,13 +214,29 @@ export default function EmployeeForm(props) {
                         error={errors.lieu}
                     />
 
-                    {/* <Controls.Input
-                        label="Ville"
-                        name="lieu"
-                        value={values.lieu}
-                        onChange={handleInputChange}
-                        error={errors.lieu}
-                    /> */}
+                    <FormControl>
+                    <div className='flex border-2 border-gray-200 rounded-md p-2 my-1 min-w-fit'>
+                        <DatePickerComponent
+                            value={values.contrat_deb}
+                            showClearButton={false}
+                            placeholder="Debut de contrat"
+                            floatLabelType="Always"
+                            change={ args => change(args, 'contrat_deb')}
+                            locale='fr-CH'
+                        />
+                    </div>
+                    <div className='flex border-2 border-gray-200 rounded-md p-2 my-2 min-w-fit'>
+                        <DatePickerComponent
+                            value={values.contrat_fin}
+                            showClearButton={false}
+                            placeholder="Fin de contrat"
+                            floatLabelType="Always"
+                            change={ args => change(args, 'contrat_fin')}
+                            locale='fr-CH'
+                        />
+                    </div>
+                    </FormControl>
+                    
 
                 </Grid> }
 
@@ -308,9 +341,17 @@ export default function EmployeeForm(props) {
                     </>
                     }
 
-                        { type == 'edit' ? 
-                         <div className='flex flex-row gap-2 w-1/2 items-center ml-2'>
-                           <a href={urlImg} download>
+                        { type == 'edit' ? <>
+                         <div className='flex flex-row gap-2  items-center ml-2'>
+                            <div className='flex bg-white rounded-2xl'>
+                                <img 
+                                    src={`${API.Local_Host_Name}/../storage/app/${values?.image ?? "public/uploads/profiles/default.png"}`}
+                                    width={100}
+                                    height={100}
+                                    className='items-center justify-center rounded-2xl'
+                                /> 
+                            </div>
+                           <a href={urlImg}>
                             <QrImg ref={componentRef} src={urlImg} nom={`${values?.ordre ?? '0'} ${values?.nom}` ?? 'erreur'}/>
                            </a>
                             <button
@@ -321,34 +362,21 @@ export default function EmployeeForm(props) {
                             >
                                 <BsPrinterFill size={20} />
                             </button>
-                         </div> : ''
+                         </div> </>: ''
                         }
-
-                    {/* <Controls.DatePicker
-                        name="hireDate"
-                        label="Hire Date"
-                        value={values.hireDate}
-                        onChange={handleInputChange}
-                    /> */}
-                    {/* <Controls.Checkbox
-                        name="isPermanent"
-                        label="Permanent Employee"
-                        value={values.isPermanent}
-                        onChange={handleInputChange}
-                    /> */}
-
-                    <div className='flex item-center flex-row'>
-                        <Controls.Button
-                            type="submit"
-                            text={type == 'add' ? "Ajouter" : type == 'edit' ? "Mettre à Jour" : "OUI"}
-                            // onClick={()=>close(false)}
-                        />
-                        <Controls.Button
-                            text={type == 'delete' ? "NON" : "Raffraichir"}
-                            color="default"
-                            onClick={type == 'delete' ? ()=>close(false) : resetForm}
-                        />
-                    </div>
+                        
+            <div className='flex item-center flex-row self-end justify-end'>
+                <Controls.Button
+                    type="submit"
+                    text={type == 'add' ? "Ajouter" : type == 'edit' ? "Mettre à Jour" : "OUI"}
+                    // onClick={()=>close(false)}
+                />
+                <Controls.Button
+                    text={type == 'delete' ? "NON" : "Raffraichir"}
+                    color="default"
+                    onClick={type == 'delete' ? ()=>close(false) : resetForm}
+                />
+            </div>
                 </Grid>
             </Grid>
         </Form>

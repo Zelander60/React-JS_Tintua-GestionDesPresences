@@ -11,12 +11,12 @@ const usePost = (refresh,type) => {
 
     // const {refresh} = props;
 
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [ok, setOK] = useState(false);
     const [error, setError] = useState(null);
 
-    const { API } = useStateContext();
+    const { API, setUserR } = useStateContext();
 
     // const if_contain = (text) => {
     //     text.
@@ -54,12 +54,13 @@ const usePost = (refresh,type) => {
                 
               } else{
                 setIsLoading(false);
-                setData(responseJson);
+                // setData(responseJson);
                 endpoint !== 'employers' ? toast.success(`${responseJson?.message}`) : '';
                 let tOrdre = query?.ordre ? query?.ordre : '1'; 
                 type == 'add' ? localStorage.setItem('Tordre', tOrdre) : '';
                 // toast.warn(`${responseJson?.message} ${responseJson?.errors}`);
-                refresh();
+                (type != null) && refresh();
+                (type == null) && setUserR(responseJson?.user[0] ?? null);
                 setOK(true);
                 console.log(responseJson)
               }

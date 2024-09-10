@@ -21,6 +21,10 @@
   z-index: 10000000 !important;
 }
 
+.conT{
+  z-index: 100000 !important;
+}
+
 .bada{
   border-width: 0px;
   border-color: #008000;

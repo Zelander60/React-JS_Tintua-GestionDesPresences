@@ -37,12 +37,13 @@ const Accueil = () => {
 //   const [dateTime, setDateTime] = useState('now');
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchPresence = async () => {
-    //   const id = toast.loading('En cours ...',{isLoading: true})
+  const [area, setArea] = useState("all");
+
+  const fetchPresence = async (mode) => {
+      const id = mode == "new" ? toast.loading('En cours ...',{isLoading: true}) : '';
             // setIsLoading(true);
-            // console.info(query)
-        await fetch(`${API.Local_Host_Name}/api/presences/now/infos`, {
+            // console.info(AllDatas?.lieu)
+        await fetch(`${API.Local_Host_Name}/api/presences/now/infos/${area ?? 'all'}`, {
                 method: 'GET',
                 headers: {
                   Accept: 'application/json',
@@ -82,18 +83,20 @@ const Accueil = () => {
                   // setError(errors);
                 })
                 .finally(()=>{
-                //   toast.dismiss(id);
+                  mode == "new" ? toast.dismiss(id) : '';
                   // setIsLoading(false);
                 });
     }
-    fetchPresence();
+
+  useEffect(() => {
+    fetchPresence("new");
     const interval = setInterval(()=>
         fetchPresence(),
         5000
     );
 
     return ()=> clearInterval(interval);
-  }, [])
+  }, [area])
 
   const today = new Date();
   function getDate() {
@@ -101,7 +104,7 @@ const Accueil = () => {
     const year = today.getFullYear();
     const date = today.getDate();
     console.log(currentColor)
-    console.log(AllDatas)
+    // console.log(AllDatas)
     return `${date}/${month}/${year}`;
   }
 
@@ -171,9 +174,29 @@ const Accueil = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap justify-center">
-        <div className="bg-white dark:text-gray-200 dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl md:w-780  ">
-          
+      <div className="flex flex-wrap items-center justify-center">
+        <div className="flex bg-white justify-center items-center dark:text-gray-200 dark:bg-secondary-dark-bg m-3 p-4 rounded-2xl md:w-780  ">
+              <button
+                onClick={()=>setArea("all")}
+                type="button"
+                style={{ backgroundColor: area == "all" ? currentColor : "white" }}
+                className={`font-semibold text-md ${area == "all" ? 'text-gray-100' : 'text-gray-400'} dark:text-gray-200 opacity-0.9 rounded-bl-xl rounded-tl-xl  p-4 hover:drop-shadow-xl`}
+              >
+                Toute l'équipe
+              </button>
+              {
+                AllDatas?.lieu && AllDatas?.lieu.map((value, keyL)=>(
+                  <button
+                    key={keyL}
+                    onClick={()=>setArea(value?.nom)}
+                    type="button"
+                    style={{ backgroundColor: area == value?.nom ? currentColor : "white" }}
+                    className={`text-md ${area == value?.nom ? 'text-gray-100' : 'text-gray-400'} dark:text-gray-200 opacity-0.9 ${keyL+1 == AllDatas?.lieu?.length ? `rounded-tr-xl rounded-br-xl` : ''}  p-4 hover:drop-shadow-xl`}
+                  >
+                    {value?.nom}
+                  </button>
+                ))
+              }
         </div>
         
       </div>
@@ -200,19 +223,21 @@ const Accueil = () => {
         <Inject services={[Search, Page, ExcelExport, ContextMenu]} />
 
       </GridComponent>
-      <ToastContainer
-      position="top-right"
-      autoClose={5000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="colored" />
+      
     </div>
-
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        className={"conZ"}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored" 
+      />
     </div>
   );
 };

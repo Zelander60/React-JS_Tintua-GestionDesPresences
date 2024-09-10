@@ -27,6 +27,7 @@ import product6 from './product6.jpg';
 import product7 from './product7.jpg';
 import avatar10 from './tintua_trans.png';
 import { FaHospitalUser } from 'react-icons/fa6';
+import { SiDotenv } from 'react-icons/si';
 // import product8 from './product8.jpg';
 
 export const gridOrderImage = (props) => (
@@ -586,28 +587,16 @@ export const links = [
         name: 'absences',
         icon:  <RiContactsBookFill />,
       },
-      // {
-      //   desc: 'LISTE SORTIES',
-      //   name: 'sorties',
-      //   icon: <RiContactsBookUploadFill />,
-      // },
-      // {
-      //   desc: 'CALENDRIER',
-      //   name: 'calendrier',
-      //   icon: <IoCalendarNumber />,
-      // },
-      // {
-      //   name: 'kanban',
-      //   icon: <BsKanban />,
-      // },
-      // {
-      //   name: 'editor',
-      //   icon: <FiEdit />,
-      // },
-      // {
-      //   name: 'color-picker',
-      //   icon: <BiColorFill />,
-      // },
+    ],
+  },
+  {
+    title: 'ENVIRONNEMENT',
+    links: [
+      {
+        desc: "VARIABLES",
+        name: 'variables',
+        icon:  <SiDotenv />,
+      },
     ],
   },
   // {
@@ -651,7 +640,16 @@ export const links = [
 ];
 
 export const UsersLinks = [
-  
+  {
+    title: 'Accueil',
+    links: [
+      {
+        desc: "COLLEGUES",
+        name: 'collegues',
+        icon: <MdSpaceDashboard />,
+      },
+    ],
+  },
   {
     title: 'Archives',
     links: [

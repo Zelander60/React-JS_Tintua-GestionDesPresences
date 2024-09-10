@@ -93,7 +93,7 @@ const Sorties = () => {
   }
 
   useEffect(() => {
-    fetchPresence();
+    if(UserR != null) fetchPresence();
     setActions({
       sID: '',
       sNo: '',

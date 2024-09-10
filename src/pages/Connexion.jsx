@@ -88,14 +88,6 @@ const Connexion = () => {
 
     return (
       <>
-        {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-white">
-          <body class="h-full">
-          ```
-        */}
         <div className="conZ absolute left-0 top-0 bottom-0 min-h-full w-full bg-white">
         <div className="flex -mt-5 min-h-full items-center flex-col justify-center mb-16 px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
