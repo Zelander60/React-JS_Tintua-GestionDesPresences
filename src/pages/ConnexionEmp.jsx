@@ -35,7 +35,7 @@ const ConnexionEmp = () => {
 
             // referrer: "http://localhost:3000/",
             method: "POST",
-            mode: "cors",
+            // mode: "cors",
                 // mode: 'same-origin', // no-cors, cors, *same-origin
                 // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                 // credentials: 'same-origin',
