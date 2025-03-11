@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 @import "../node_modules/@syncfusion/ej2/material.css";
 
 /* @import url('https://cdn.syncfusion.com/ej2/material.css'); */
@@ -19,6 +24,12 @@
 }
 .conZ{
   z-index: 10000000 !important;
+}
+
+@layer utilities {
+  .no-break {
+    page-break-inside: avoid;
+  }
 }
 
 .conT{

@@ -13,6 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import API from '../constants/Api';
 import { FaBusinessTime, FaUserClock, FaUserTie } from "react-icons/fa";
+import { useParams } from 'react-router-dom';
 
 const DropDown = ({ currentMode }) => (
   <div className="w-28 border-1 border-color px-2 py-1 rounded-md">
@@ -31,6 +32,7 @@ const Accueil = () => {
      );
 
   const toolbarOptions = ['Search'];
+
 
   const editing = { allowDeleting: true, allowEditing: true };
 

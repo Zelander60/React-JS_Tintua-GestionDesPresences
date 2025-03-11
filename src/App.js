@@ -18,6 +18,7 @@ import Absences from './pages/Absences';
 import ConnexionEmp from './pages/ConnexionEmp';
 import Variables from './pages/Variables';
 import Collegue from './pages/Collegues';
+import Qrpage from './pages/Qrpage';
 
 const App = () => {
 
@@ -52,7 +53,7 @@ const App = () => {
 
             </TooltipComponent>
           </div>
-          {activeMenu ? (
+          {/* {activeMenu ? (
             <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
               <Sidebar />
             </div>
@@ -60,7 +61,7 @@ const App = () => {
             <div className="w-0 dark:bg-secondary-dark-bg">
               <Sidebar />
             </div>
-          )}
+          )} */}
           <div
             className={
               activeMenu
@@ -68,28 +69,29 @@ const App = () => {
                 : 'bg-main-bg dark:bg-main-dark-bg  w-full min-h-screen flex-2 '
             }
           >
-            <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
+            {/* <div className="fixed md:static bg-main-bg dark:bg-main-dark-bg navbar w-full ">
               <Navbar />
-            </div>
+            </div> */}
             <div>
               {themeSettings && (<ThemeSettings />)}
 
               <Routes>
                 {/* dashboard  */}
-                <Route path="/tintua" element={(<Connexion />)} />
+                <Route path="/" element={(<Qrpage/> )} />
+                {/* <Route path="/tintua" element={(<Connexion />)} />
                 <Route path="/" element={(<ConnexionEmp />)} />
                 <Route path="/user" element={(<ConnexionEmp/>)} />
-                <Route path="/acceuil" element={(online ? <Accueil /> : <Offline />)} />
+                <Route path="/acceuil" element={(online ? <Accueil /> : <Offline />)} /> */}
 
                 {/* pages  */}
                 {/* <Route path="/orders" element={<Orders />} /> */}
-                <Route path="/collegues" element={online ? <Collegue /> : <Offline />} />
+                {/* <Route path="/collegues" element={online ? <Collegue /> : <Offline />} />
                 <Route path="/presences" element={online ? <Employees /> : <Offline />} />
                 <Route path="/listeEmployes" element={online ? <EmployersTotal /> : <Offline />} />
                 <Route path="/sorties" element={online ? <Sorties /> : <Offline />} />
                 <Route path="/calendrier" element={online ? <Calendar /> : <Offline />} />
                 <Route path="/absences" element={online ? <Absences /> : <Offline />} />
-                <Route path="/variables" element={online ? <Variables /> : <Offline />} />
+                <Route path="/variables" element={online ? <Variables /> : <Offline />} /> */}
 
                 {/* <Route path="/customers" element={<Customers />} /> */}
 

@@ -35,7 +35,7 @@ const Connexion = () => {
 
             // referrer: "http://localhost:3000/",
             method: "POST",
-            mode: "cors",
+            // mode: "no-cors",
                 // mode: 'same-origin', // no-cors, cors, *same-origin
                 // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
                 // credentials: 'same-origin',
@@ -102,7 +102,9 @@ const Connexion = () => {
           </div>
   
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" method="">
+            <form className="space-y-6" method=""
+            //  onSubmit={()=>Connecter()}
+            >
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                   Nom d'utilisateur
@@ -127,7 +129,7 @@ const Connexion = () => {
                     Mot de passe
                   </label>
                   <div className="text-sm">
-                    <a href="/acceuil" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                    <a href="/acceuil?redirect=tintua" className="font-semibold text-indigo-600 hover:text-indigo-500">
                       Oublié?
                     </a>
                   </div>
@@ -148,8 +150,9 @@ const Connexion = () => {
   
               <div>
                 <button
-                  type="button"
+                  type='button'
                   onClick={()=>Connecter()}
+                  // onSubmit={()=>Connecter()}
                   style={{ background: currentColor,}}
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
